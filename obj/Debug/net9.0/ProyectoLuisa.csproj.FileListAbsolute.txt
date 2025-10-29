@@ -220,3 +220,4 @@ C:\Users\danie\ProyectoLuisa\obj\Debug\net9.0\ProyectoLuisa.genruntimeconfig.cac
 C:\Users\danie\ProyectoLuisa\obj\Debug\net9.0\ref\ProyectoLuisa.dll
 C:\Users\danie\ProyectoLuisa\bin\Debug\net9.0\MySqlConnector.dll
 C:\Users\danie\ProyectoLuisa\bin\Debug\net9.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\danie\ProyectoLuisa\obj\Debug\net9.0\ProyectoLuisa.sourcelink.json
