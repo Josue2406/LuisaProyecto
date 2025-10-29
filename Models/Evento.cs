@@ -16,6 +16,9 @@ namespace ProyectoLuisa.Models
         [Required]
         public DateTime Fecha { get; set; }
 
+         // 🔹 Imagen (ruta del archivo)
+        public string? ImagenUrl { get; set; }
+
         // Relación con el docente que lo creó
         public int DocenteId { get; set; }
         public Usuario? Docente { get; set; }

@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <h3 class="text-center mb-4">Crear Nuevo Evento</h3>
 
-    <form method="post" asp-action="Crear">
+    <form asp-action="Crear" enctype="multipart/form-data">
         <div class="mb-3">
             <label class="form-label">Título</label>
             <input asp-for="Titulo" class="form-control" required />
@@ -20,6 +20,11 @@
         <div class="mb-3">
             <label class="form-label">Fecha</label>
             <input asp-for="Fecha" type="date" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Imagen del evento</label>
+            <input type="file" name="Imagen" accept="image/*" class="form-control" />
         </div>
 
         <div class="mb-3 form-check">

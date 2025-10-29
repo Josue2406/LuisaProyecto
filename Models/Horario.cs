@@ -19,6 +19,10 @@ namespace ProyectoLuisa.Models
         [Required]
         public TimeSpan HoraFin { get; set; }
 
+         [Required, StringLength(50)]
+        public string Seccion { get; set; } = string.Empty;
+
+
         // Relación con el docente
         public int DocenteId { get; set; }
         public Usuario? Docente { get; set; }

@@ -6,9 +6,8 @@
 <div class="container mt-4">
     <h3 class="text-center mb-4">Editar Evento</h3>
 
-    <form method="post" asp-action="Editar">
+    <form asp-action="Editar" enctype="multipart/form-data">
         <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="DocenteId" />
 
         <div class="mb-3">
             <label class="form-label">Título</label>
@@ -23,6 +22,18 @@
         <div class="mb-3">
             <label class="form-label">Fecha</label>
             <input asp-for="Fecha" type="date" class="form-control" required />
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ImagenUrl))
+        {
+            <div class="mb-3 text-center">
+                <img src="@Model.ImagenUrl" class="img-thumbnail mb-2" style="max-width: 250px;" />
+            </div>
+        }
+
+        <div class="mb-3">
+            <label class="form-label">Cambiar Imagen</label>
+            <input type="file" name="NuevaImagen" accept="image/*" class="form-control" />
         </div>
 
         <div class="mb-3 form-check">

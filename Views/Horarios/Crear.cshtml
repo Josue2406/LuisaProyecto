@@ -1,19 +1,19 @@
 @model ProyectoLuisa.Models.Horario
 @{
-    ViewData["Title"] = "Crear Horario";
+    ViewData["Title"] = "Añadir Horario";
 }
 
 <div class="container mt-4">
-    <h3 class="text-center mb-4">Crear Nuevo Horario</h3>
+    <h3 class="text-center text-success mb-4">➕ Añadir Horario</h3>
 
-    <form method="post" asp-action="Crear">
+    <form asp-action="Crear">
         <div class="mb-3">
             <label class="form-label">Materia</label>
             <input asp-for="Materia" class="form-control" required />
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Día de la semana</label>
+            <label class="form-label">Día de la Semana</label>
             <select asp-for="DiaSemana" class="form-select" required>
                 <option value="">Seleccione un día</option>
                 <option>Lunes</option>
@@ -26,13 +26,18 @@
 
         <div class="row mb-3">
             <div class="col">
-                <label class="form-label">Hora inicio</label>
+                <label class="form-label">Hora Inicio</label>
                 <input asp-for="HoraInicio" type="time" class="form-control" required />
             </div>
             <div class="col">
-                <label class="form-label">Hora fin</label>
+                <label class="form-label">Hora Fin</label>
                 <input asp-for="HoraFin" type="time" class="form-control" required />
             </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Sección</label>
+            <input asp-for="Seccion" class="form-control" placeholder="Ej: Sétimo A" required />
         </div>
 
         <div class="mb-3 form-check">
@@ -41,6 +46,6 @@
         </div>
 
         <button type="submit" class="btn btn-success w-100">Guardar</button>
-        <a href="/Horarios" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+        <a href="/Horarios" class="btn btn-outline-secondary w-100 mt-2">Cancelar</a>
     </form>
 </div>
