@@ -1,0 +1,46 @@
+@model ProyectoLuisa.Models.Horario
+@{
+    ViewData["Title"] = "Crear Horario";
+}
+
+<div class="container mt-4">
+    <h3 class="text-center mb-4">Crear Nuevo Horario</h3>
+
+    <form method="post" asp-action="Crear">
+        <div class="mb-3">
+            <label class="form-label">Materia</label>
+            <input asp-for="Materia" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Día de la semana</label>
+            <select asp-for="DiaSemana" class="form-select" required>
+                <option value="">Seleccione un día</option>
+                <option>Lunes</option>
+                <option>Martes</option>
+                <option>Miércoles</option>
+                <option>Jueves</option>
+                <option>Viernes</option>
+            </select>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <label class="form-label">Hora inicio</label>
+                <input asp-for="HoraInicio" type="time" class="form-control" required />
+            </div>
+            <div class="col">
+                <label class="form-label">Hora fin</label>
+                <input asp-for="HoraFin" type="time" class="form-control" required />
+            </div>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input asp-for="Publicado" type="checkbox" class="form-check-input" checked />
+            <label class="form-check-label">Publicar horario</label>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Guardar</button>
+        <a href="/Horarios" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+    </form>
+</div>

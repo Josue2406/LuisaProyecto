@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Activar Cuenta";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="text-center mb-3">Activar Cuenta</h3>
+                    <p>Estás activando la cuenta asociada al correo: <strong>@ViewBag.Email</strong></p>
+
+                    <form method="post">
+                        <input type="hidden" name="email" value="@ViewBag.Email" />
+
+                        <div class="mb-3">
+                            <label for="nuevaContrasena" class="form-label">Nueva Contraseña</label>
+                            <input type="password" name="nuevaContrasena" class="form-control" required minlength="6" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Activar Cuenta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

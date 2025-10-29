@@ -1,0 +1,36 @@
+@model ProyectoLuisa.Models.Evento
+@{
+    ViewData["Title"] = "Editar Evento";
+}
+
+<div class="container mt-4">
+    <h3 class="text-center mb-4">Editar Evento</h3>
+
+    <form method="post" asp-action="Editar">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="DocenteId" />
+
+        <div class="mb-3">
+            <label class="form-label">Título</label>
+            <input asp-for="Titulo" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea asp-for="Descripcion" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha</label>
+            <input asp-for="Fecha" type="date" class="form-control" required />
+        </div>
+
+        <div class="mb-3 form-check">
+            <input asp-for="Publicado" type="checkbox" class="form-check-input" />
+            <label class="form-check-label">Publicar evento</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Actualizar</button>
+        <a href="/Eventos" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+    </form>
+</div>

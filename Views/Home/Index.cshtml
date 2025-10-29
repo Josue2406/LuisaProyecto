@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+    var eventos = ViewBag.Eventos as List<ProyectoLuisa.Models.Evento>;
+    var horarios = ViewBag.Horarios as List<ProyectoLuisa.Models.Horario>;
+}
+
+<!-- Banner -->
+<div class="bg-primary text-white text-center py-5 mb-5">
+    <h1>Bienvenidos a la Plataforma Educativa Luisa</h1>
+    <p>Conectando docentes, estudiantes y comunidad educativa</p>
+</div>
+
+<!-- Sección Misión y Visión -->
+<div class="row mb-5">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h3 class="text-primary mb-3">🎯 Misión</h3>
+                <p>
+                    Formar estudiantes integrales con valores humanos, éticos y sociales,
+                    comprometidos con su entorno y el desarrollo sostenible, mediante una
+                    educación de calidad y tecnología accesible.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h3 class="text-success mb-3">🌱 Visión</h3>
+                <p>
+                    Ser una institución líder en innovación educativa, que promueva el
+                    aprendizaje inclusivo y la excelencia académica a través del compromiso
+                    docente y la participación de la comunidad.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de imágenes -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div id="carouselHome" class="carousel slide shadow-sm" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://picsum.photos/1200/400?school1" class="d-block w-100 rounded" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://picsum.photos/1200/400?school2" class="d-block w-100 rounded" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://picsum.photos/1200/400?school3" class="d-block w-100 rounded" alt="...">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Eventos públicos -->
+<h2 class="mb-3 text-center text-primary">📅 Últimos Eventos</h2>
+@if (eventos?.Count > 0)
+{
+    <div class="row mb-5">
+        @foreach (var e in eventos)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="fw-bold">@e.Titulo</h5>
+                        <p>@e.Descripcion</p>
+                        <small class="text-muted">Fecha: @e.Fecha.ToString("dd/MM/yyyy")</small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="text-center text-muted">No hay eventos publicados por ahora.</p>
+}
+
+<!-- Horarios públicos -->
+<h2 class="mb-3 text-center text-success">🕓 Horarios Públicos</h2>
+@if (horarios?.Count > 0)
+{
+    <div class="table-responsive mb-5">
+        <table class="table table-striped shadow-sm">
+            <thead class="table-success">
+                <tr>
+                    <th>Materia</th>
+                    <th>Día</th>
+                    <th>Hora Inicio</th>
+                    <th>Hora Fin</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var h in horarios)
+                {
+                    <tr>
+                        <td>@h.Materia</td>
+                        <td>@h.DiaSemana</td>
+                        <td>@h.HoraInicio</td>
+                        <td>@h.HoraFin</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p class="text-center text-muted">Aún no se han publicado horarios.</p>
+}
