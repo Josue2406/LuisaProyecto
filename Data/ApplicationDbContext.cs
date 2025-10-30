@@ -16,6 +16,9 @@ namespace ProyectoLuisa.Data
 public DbSet<Evento> Eventos { get; set; }
 public DbSet<Horario> Horarios { get; set; }
 
+public DbSet<InformacionInstitucional> InformacionInstitucional { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

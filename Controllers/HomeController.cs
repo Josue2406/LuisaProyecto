@@ -8,9 +8,8 @@ namespace ProyectoLuisa.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _context; // ✅ Agregado
+        private readonly ApplicationDbContext _context;
 
-        // ✅ Ahora inyectamos también el contexto junto con el logger
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
@@ -19,13 +18,18 @@ namespace ProyectoLuisa.Controllers
 
         public IActionResult Index()
         {
-            // Mostrar solo los publicados
+            // 🔹 Cargar la información institucional
+            var info = _context.InformacionInstitucional.FirstOrDefault();
+            ViewBag.Info = info;
+
+            // 🔹 Mostrar los últimos eventos publicados
             var eventos = _context.Eventos
                 .Where(e => e.Publicado)
                 .OrderByDescending(e => e.Fecha)
                 .Take(3)
                 .ToList();
 
+            // 🔹 Mostrar horarios públicos
             var horarios = _context.Horarios
                 .Where(h => h.Publicado)
                 .OrderBy(h => h.DiaSemana)
@@ -41,12 +45,16 @@ namespace ProyectoLuisa.Controllers
 
         public IActionResult Privacy()
         {
+            var info = _context.InformacionInstitucional.FirstOrDefault();
+            ViewBag.Info = info;
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            var info = _context.InformacionInstitucional.FirstOrDefault();
+            ViewBag.Info = info;
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

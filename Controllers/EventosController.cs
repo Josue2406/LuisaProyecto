@@ -35,6 +35,9 @@ namespace ProyectoLuisa.Controllers
         {
             if (!EsDocenteOAdmin())
                 return View("~/Views/Shared/AccesoDenegado.cshtml");
+                var info = _context.InformacionInstitucional.FirstOrDefault();
+ViewBag.Info = info;
+
             return View();
         }
 

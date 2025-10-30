@@ -1,0 +1,77 @@
+@model ProyectoLuisa.Models.InformacionInstitucional
+@{
+    ViewData["Title"] = "Información Institucional";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Administrar Información Institucional</h2>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success text-center">@TempData["Mensaje"]</div>
+    }
+
+    <form method="post" asp-action="Guardar">
+        <div class="card shadow border-0">
+            <div class="card-body p-4">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Misión</label>
+                    <textarea asp-for="Mision" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Visión</label>
+                    <textarea asp-for="Vision" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Valores</label>
+                    <textarea asp-for="Valores" class="form-control" rows="2"></textarea>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Teléfono</label>
+                        <input asp-for="Telefono" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Correo</label>
+                        <input asp-for="Correo" class="form-control" type="email" />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Dirección</label>
+                    <input asp-for="Direccion" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Logo (URL)</label>
+                    <input asp-for="LogoUrl" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Texto del Footer</label>
+                    <input asp-for="FooterTexto" class="form-control" />
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success fw-bold">
+                        <i class="bi bi-save"></i> Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="text-center mt-3">
+        <a href="/Admin" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Volver al Panel
+        </a>
+    </div>
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
