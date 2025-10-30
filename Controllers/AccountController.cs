@@ -95,7 +95,7 @@ namespace ProyectoLuisa.Controllers
 
             await _emailService.EnviarCorreoAsync(correo, "Recuperación de Contraseña", html);
             ViewBag.Mensaje = "Se ha enviado un correo con el enlace de recuperación.";
-            return View();
+            return View("Index", "Login");
         }
 
         // ------------------------------------------------------------

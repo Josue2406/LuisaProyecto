@@ -27,7 +27,6 @@ namespace ProyectoLuisa.Controllers
             }
 
             string hash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(contrasena)));
-
             var usuario = _context.Usuarios.FirstOrDefault(u => u.Correo == correo && u.ContrasenaHash == hash);
 
             if (usuario == null)
@@ -36,13 +35,25 @@ namespace ProyectoLuisa.Controllers
                 return View();
             }
 
-            if (!usuario.Activo && usuario.Rol != "Admin")
+            // 🔒 Bloqueo si el usuario fue desactivado manualmente
+            if (!usuario.Activo)
             {
-                ViewBag.Error = "Tu cuenta aún no ha sido activada. Revisa tu correo.";
+                ViewBag.Error = "Tu cuenta está desactivada. Contacta al administrador.";
                 return View();
             }
 
-            // ✅ GUARDAR SESIÓN DESPUÉS DE VALIDAR
+            // 🔒 Bloqueo si su rol fue desactivado por eliminación
+            var rolActivo = _context.Usuarios
+                .Where(u => u.Rol == usuario.Rol && u.Activo)
+                .Any();
+
+            if (!rolActivo && usuario.Rol != "Admin")
+            {
+                ViewBag.Error = $"Tu rol '{usuario.Rol}' fue desactivado por el administrador.";
+                return View();
+            }
+
+            // Guardar sesión
             HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
             HttpContext.Session.SetString("Rol", usuario.Rol);
             HttpContext.Session.SetString("Nombre", usuario.Nombre);
@@ -52,23 +63,14 @@ namespace ProyectoLuisa.Controllers
             {
                 case "Admin":
                     return RedirectToAction("Index", "Admin");
-
                 case "Docente":
                     return RedirectToAction("Inicio", "Docente");
-
                 case "Usuario":
                     return RedirectToAction("Inicio", "Usuario");
-
                 default:
                     ViewBag.Error = "Rol desconocido o no autorizado.";
                     return View();
             }
-        }
-        // 🔹 Cerrar sesión
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Login");
         }
     }
 }
