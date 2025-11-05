@@ -1,48 +1,78 @@
 @model ProyectoLuisa.Models.Horario
+
 @{
-    ViewData["Title"] = "Editar Horario";
+    ViewData["Title"] = "Crear Horario";
 }
 
-<div class="container mt-4">
-    <h3 class="text-center mb-4">Editar Horario</h3>
+<h2 class="text-center mb-4">🕓 Crear Nuevo Horario</h2>
 
-    <form method="post" asp-action="Editar">
-        <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="DocenteId" />
+<form asp-action="Crear" method="post" class="row g-3 shadow-sm p-4 bg-light rounded">
+    <div class="col-md-6">
+        <label asp-for="Materia" class="form-label fw-bold">Materia</label>
+        <input asp-for="Materia" class="form-control" placeholder="Ej: Matemáticas, Historia..." />
+        <span asp-validation-for="Materia" class="text-danger"></span>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Materia</label>
-            <input asp-for="Materia" class="form-control" required />
-        </div>
+    <div class="col-md-6">
+        <label asp-for="Profesor" class="form-label fw-bold">Profesor</label>
+        <input asp-for="Profesor" class="form-control" placeholder="Nombre del docente" />
+        <span asp-validation-for="Profesor" class="text-danger"></span>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Día de la semana</label>
-            <select asp-for="DiaSemana" class="form-select" required>
-                <option>Lunes</option>
-                <option>Martes</option>
-                <option>Miércoles</option>
-                <option>Jueves</option>
-                <option>Viernes</option>
-            </select>
-        </div>
+    <div class="col-md-4">
+        <label asp-for="DiaSemana" class="form-label fw-bold">Día de la Semana</label>
+        <select asp-for="DiaSemana" class="form-select">
+            <option value="">Seleccione un día</option>
+            <option value="Lunes">Lunes</option>
+            <option value="Martes">Martes</option>
+            <option value="Miércoles">Miércoles</option>
+            <option value="Jueves">Jueves</option>
+            <option value="Viernes">Viernes</option>
+            <option value="Sábado">Sábado</option>
+        </select>
+        <span asp-validation-for="DiaSemana" class="text-danger"></span>
+    </div>
 
-        <div class="row mb-3">
-            <div class="col">
-                <label class="form-label">Hora inicio</label>
-                <input asp-for="HoraInicio" type="time" class="form-control" required />
-            </div>
-            <div class="col">
-                <label class="form-label">Hora fin</label>
-                <input asp-for="HoraFin" type="time" class="form-control" required />
-            </div>
-        </div>
+    <div class="col-md-4">
+        <label asp-for="HoraInicio" class="form-label fw-bold">Hora de Inicio</label>
+        <input asp-for="HoraInicio" type="time" class="form-control" />
+        <span asp-validation-for="HoraInicio" class="text-danger"></span>
+    </div>
 
-        <div class="mb-3 form-check">
-            <input asp-for="Publicado" type="checkbox" class="form-check-input" />
-            <label class="form-check-label">Publicar horario</label>
-        </div>
+    <div class="col-md-4">
+        <label asp-for="HoraFin" class="form-label fw-bold">Hora de Finalización</label>
+        <input asp-for="HoraFin" type="time" class="form-control" />
+        <span asp-validation-for="HoraFin" class="text-danger"></span>
+    </div>
 
-        <button type="submit" class="btn btn-primary w-100">Actualizar</button>
-        <a href="/Horarios" class="btn btn-secondary w-100 mt-2">Cancelar</a>
-    </form>
-</div>
+    <div class="col-md-6">
+        <label asp-for="Aula" class="form-label fw-bold">Aula</label>
+        <input asp-for="Aula" class="form-control" placeholder="Ej: Aula 3, Laboratorio, etc." />
+        <span asp-validation-for="Aula" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Grupo" class="form-label fw-bold">Grupo</label>
+        <input asp-for="Grupo" class="form-control" placeholder="Ej: A, B, C" />
+        <span asp-validation-for="Grupo" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Seccion" class="form-label fw-bold">Sección (opcional)</label>
+        <input asp-for="Seccion" class="form-control" placeholder="Ej: Sec1, Sec2..." />
+        <span asp-validation-for="Seccion" class="text-danger"></span>
+    </div>
+
+    <div class="col-12 text-center mt-4">
+        <button type="submit" class="btn btn-success px-4">
+            <i class="bi bi-save"></i> Guardar
+        </button>
+        <a asp-action="Index" class="btn btn-secondary px-4">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

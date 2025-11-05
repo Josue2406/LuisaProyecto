@@ -1,168 +1,117 @@
 @model IEnumerable<ProyectoLuisa.Models.Horario>
+
 @{
-    ViewData["Title"] = "Horarios Escolares";
-    var secciones = ViewBag.Secciones as List<string>;
-    var seleccionada = ViewBag.SeccionSeleccionada as string;
+    ViewData["Title"] = "Consulta de Horarios";
+    var rol = Context.Session.GetString("Rol");
 }
 
-<div class="container mt-4">
-    <h2 class="text-center mb-4 text-success fw-bold">🕓 Horarios Escolares</h2>
+<h2 class="mb-4 text-center fw-bold text-primary">🕓 Consulta y Gestión de Horarios</h2>
 
-    <!-- 🔹 Filtro por sección -->
-    <form method="get" class="d-flex justify-content-center mb-4">
-        <select name="seccion" class="form-select w-auto shadow-sm" onchange="this.form.submit()">
-            <option value="">-- Seleccione una sección --</option>
-            @foreach (var s in secciones)
-            {
-                <option value="@s" selected="@(s == seleccionada)">
-                    @s
-                </option>
-            }
+<!-- 🔹 Botón de creación solo visible para Docente o Admin -->
+@if (rol == "Docente" || rol == "Admin")
+{
+    <div class="mb-3 text-end">
+        <a asp-action="Crear" class="btn btn-success shadow-sm">
+            <i class="bi bi-plus-circle"></i> Nuevo Horario
+        </a>
+    </div>
+}
+
+<!-- 🔹 Filtros -->
+<form method="get" class="row g-3 mb-4 bg-light p-3 rounded shadow-sm">
+    <div class="col-md-3">
+        <label class="form-label fw-semibold">Día de la Semana</label>
+        <select name="dia" class="form-select">
+            <option value="">Todos</option>
+            <option value="Lunes">Lunes</option>
+            <option value="Martes">Martes</option>
+            <option value="Miércoles">Miércoles</option>
+            <option value="Jueves">Jueves</option>
+            <option value="Viernes">Viernes</option>
+            <option value="Sábado">Sábado</option>
         </select>
-    </form>
+    </div>
 
-    <!-- 🔹 Botones CRUD (solo Docente/Admin) -->
-    @if (Context.Session.GetString("Rol") == "Docente" || Context.Session.GetString("Rol") == "Admin")
-    {
-        <div class="d-flex justify-content-between mb-4">
-            <a href="/Horarios/Crear" class="btn btn-success shadow-sm">
-                <i class="bi bi-plus-lg"></i> Añadir Horario
-            </a>
-            <a href="/Docente/Inicio" class="btn btn-outline-secondary shadow-sm">
-                <i class="bi bi-arrow-left"></i> Volver al panel
-            </a>
-        </div>
-    }
+    <div class="col-md-3">
+        <label class="form-label fw-semibold">Grupo</label>
+        <input type="text" name="grupo" value="@Context.Request.Query["grupo"]"
+               class="form-control" placeholder="Ej: A, B, C" />
+    </div>
 
-    <!-- 🔹 Tabla de horarios -->
-    @if (!Model.Any())
-    {
-        <div class="alert alert-info text-center shadow-sm">
-            <i class="bi bi-calendar2-x"></i> No hay horarios registrados para esta sección.
-        </div>
-    }
-    else
-    {
-        <div class="table-responsive shadow-sm rounded-3 overflow-hidden">
-            <table class="table align-middle table-hover mb-0">
-                <thead class="table-success">
+    <div class="col-md-3">
+        <label class="form-label fw-semibold">Profesor</label>
+        <input type="text" name="profesor" value="@Context.Request.Query["profesor"]"
+               class="form-control" placeholder="Nombre del profesor" />
+    </div>
+
+    <div class="col-md-3 align-self-end">
+        <button type="submit" class="btn btn-primary w-100 shadow-sm">
+            <i class="bi bi-search"></i> Buscar
+        </button>
+    </div>
+</form>
+
+<!-- 🔹 Tabla -->
+@if (Model != null && Model.Any())
+{
+    <div class="table-responsive shadow-sm">
+        <table class="table table-striped table-hover align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Materia</th>
+                    <th>Día</th>
+                    <th>Hora Inicio</th>
+                    <th>Hora Fin</th>
+                    <th>Aula</th>
+                    <th>Grupo</th>
+                    <th>Profesor</th>
+                    @if (rol == "Docente" || rol == "Admin")
+                    {
+                        <th>Acciones</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var h in Model)
+                {
                     <tr>
-                        <th>Materia</th>
-                        <th>Día</th>
-                        <th>Inicio</th>
-                        <th>Fin</th>
-                        <th>Sección</th>
-                        @if (Context.Session.GetString("Rol") == "Docente" || Context.Session.GetString("Rol") == "Admin")
+                        <td>@h.Materia</td>
+                        <td>@h.DiaSemana</td>
+                        <td>@h.HoraInicio.ToString(@"hh\:mm")</td>
+                        <td>@h.HoraFin.ToString(@"hh\:mm")</td>
+                        <td>@h.Aula</td>
+                        <td>@h.Grupo</td>
+                        <td>@h.Profesor</td>
+
+                        @if (rol == "Docente" || rol == "Admin")
                         {
-                            <th>Acciones</th>
+                            <td>
+                                <a asp-action="Editar" asp-route-id="@h.Id" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pencil"></i> Editar
+                                </a>
+
+                                <form asp-action="Eliminar" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@h.Id" />
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('¿Seguro que deseas eliminar este horario?');">
+                                        <i class="bi bi-trash"></i> Eliminar
+                                    </button>
+                                </form>
+                            </td>
                         }
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var h in Model)
-                    {
-                        var diaClase = h.DiaSemana.ToLower();
-                        var diaColor = diaClase switch
-                        {
-                            "lunes" => "bg-lunes",
-                            "martes" => "bg-martes",
-                            "miércoles" or "miercoles" => "bg-miercoles",
-                            "jueves" => "bg-jueves",
-                            "viernes" => "bg-viernes",
-                            _ => "bg-otro"
-                        };
-
-                        <tr class="@diaColor">
-                            <td>
-                                <span class="badge bg-light text-dark px-3 py-2 shadow-sm">
-                                    @h.Materia
-                                </span>
-                            </td>
-                            <td class="fw-semibold">@h.DiaSemana</td>
-                            <td>@h.HoraInicio.ToString(@"hh\:mm")</td>
-                            <td>@h.HoraFin.ToString(@"hh\:mm")</td>
-                            <td>
-                                <span class="badge bg-secondary-subtle text-dark px-3 py-2">
-                                    @h.Seccion
-                                </span>
-                            </td>
-
-                            @if (Context.Session.GetString("Rol") == "Docente" || Context.Session.GetString("Rol") == "Admin")
-                            {
-                                <td>
-                                    <div class="btn-group">
-                                        <a href="/Horarios/Editar/@h.Id" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil"></i> Editar
-                                        </a>
-                                        <form method="post" action="/Horarios/Eliminar/@h.Id" style="display:inline;">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('¿Seguro que deseas eliminar este horario?');">
-                                                <i class="bi bi-trash"></i> Eliminar
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            }
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
-</div>
-
-<!-- 🔹 Estilos adicionales -->
-<style>
-.table thead th {
-    font-weight: 600;
-    letter-spacing: 0.3px;
+                }
+            </tbody>
+        </table>
+    </div>
 }
-.table-hover tbody tr:hover {
-    background-color: #f5fff7 !important;
-    transition: 0.2s;
-}
-.badge {
-    font-size: 0.85rem;
-    border-radius: 1rem;
+else
+{
+    <div class="alert alert-warning text-center mt-4">
+        <i class="bi bi-exclamation-triangle"></i> No se encontraron horarios con los filtros seleccionados.
+    </div>
 }
 
-/* 🎨 Colores por día */
-.bg-lunes { background-color: #e9f7ef !important; }
-.bg-martes { background-color: #e8f4fc !important; }
-.bg-miercoles { background-color: #fffbe6 !important; }
-.bg-jueves { background-color: #fce8f4 !important; }
-.bg-viernes { background-color: #f3f0ff !important; }
-.bg-otro { background-color: #f9f9f9 !important; }
-
-@@media (max-width: 768px) {
-    table thead {
-        display: none;
-    }
-    table, table tbody, table tr, table td {
-        display: block;
-        width: 100%;
-    }
-    table tr {
-        margin-bottom: 1rem;
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-    table td {
-        padding: 10px 15px;
-        text-align: right;
-        position: relative;
-    }
-    table td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 15px;
-        width: 50%;
-        font-weight: 600;
-        text-align: left;
-    }
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
-</style>
-
-<!-- Bootstrap Icons -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">

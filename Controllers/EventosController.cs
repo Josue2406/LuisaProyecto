@@ -21,12 +21,13 @@ namespace ProyectoLuisa.Controllers
             return rol == "Docente" || rol == "Admin";
         }
 
+        // 📋 Index: muestra según el rol
         public IActionResult Index()
         {
-            var eventos = _context.Eventos
-                .Where(e => e.Publicado)
-                .OrderByDescending(e => e.Fecha)
-                .ToList();
+            var eventos = EsDocenteOAdmin()
+                ? _context.Eventos.OrderByDescending(e => e.Fecha).ToList()        // todos
+                : _context.Eventos.Where(e => e.Publicado).OrderByDescending(e => e.Fecha).ToList(); // solo publicados
+
             return View(eventos);
         }
 
@@ -35,9 +36,8 @@ namespace ProyectoLuisa.Controllers
         {
             if (!EsDocenteOAdmin())
                 return View("~/Views/Shared/AccesoDenegado.cshtml");
-                var info = _context.InformacionInstitucional.FirstOrDefault();
-ViewBag.Info = info;
 
+            ViewBag.Info = _context.InformacionInstitucional.FirstOrDefault();
             return View();
         }
 
@@ -101,7 +101,7 @@ ViewBag.Info = info;
             evento.Fecha = model.Fecha;
             evento.Publicado = model.Publicado;
 
-            // Si sube una nueva imagen, reemplazar
+            // 📸 Si sube una nueva imagen, reemplazar
             if (NuevaImagen != null && NuevaImagen.Length > 0)
             {
                 string carpeta = Path.Combine(_env.WebRootPath, "uploads/eventos");
@@ -124,6 +124,23 @@ ViewBag.Info = info;
             return RedirectToAction("Index");
         }
 
+        // 🔁 Publicar o despublicar
+        [HttpPost]
+        public IActionResult CambiarEstado(int id)
+        {
+            if (!EsDocenteOAdmin())
+                return View("~/Views/Shared/AccesoDenegado.cshtml");
+
+            var evento = _context.Eventos.Find(id);
+            if (evento == null) return NotFound();
+
+            evento.Publicado = !evento.Publicado;
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        // 🔴 Eliminar evento
         [HttpPost]
         public IActionResult Eliminar(int id)
         {

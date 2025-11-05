@@ -1,38 +1,55 @@
 @model ProyectoLuisa.Models.Evento
+
 @{
     ViewData["Title"] = "Crear Evento";
 }
 
-<div class="container mt-4">
-    <h3 class="text-center mb-4">Crear Nuevo Evento</h3>
+<h2 class="text-center mb-4">📅 Crear Nuevo Evento</h2>
 
-    <form asp-action="Crear" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label class="form-label">Título</label>
-            <input asp-for="Titulo" class="form-control" required />
-        </div>
+<form asp-action="Crear" enctype="multipart/form-data" method="post" class="row g-3 needs-validation" novalidate>
+    <div class="col-md-6">
+        <label asp-for="Titulo" class="form-label fw-bold">Título del Evento</label>
+        <input asp-for="Titulo" class="form-control" placeholder="Ej: Charla sobre IA en educación" />
+        <span asp-validation-for="Titulo" class="text-danger"></span>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Descripción</label>
-            <textarea asp-for="Descripcion" class="form-control" rows="4" required></textarea>
-        </div>
+    <div class="col-md-6">
+        <label asp-for="Fecha" class="form-label fw-bold">Fecha del Evento</label>
+        <input asp-for="Fecha" type="date" class="form-control" />
+        <span asp-validation-for="Fecha" class="text-danger"></span>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Fecha</label>
-            <input asp-for="Fecha" type="date" class="form-control" required />
-        </div>
+    <div class="col-12">
+        <label asp-for="Descripcion" class="form-label fw-bold">Descripción</label>
+        <textarea asp-for="Descripcion" class="form-control" rows="4" placeholder="Agrega una breve descripción del evento..."></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Imagen del evento</label>
-            <input type="file" name="Imagen" accept="image/*" class="form-control" />
-        </div>
+    <div class="col-md-6">
+        <label class="form-label fw-bold">Imagen del Evento (opcional)</label>
+        <input type="file" name="Imagen" class="form-control" accept="image/*" />
+        <div class="form-text">Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 5 MB.</div>
+    </div>
 
-        <div class="mb-3 form-check">
-            <input asp-for="Publicado" type="checkbox" class="form-check-input" checked />
-            <label class="form-check-label">Publicar evento</label>
-        </div>
+    <div class="col-md-6">
+        <label asp-for="Publicado" class="form-label fw-bold">Estado</label>
+        <select asp-for="Publicado" class="form-select">
+            <option value="true">Publicado</option>
+            <option value="false">No publicado</option>
+        </select>
+        <span asp-validation-for="Publicado" class="text-danger"></span>
+    </div>
 
-        <button type="submit" class="btn btn-success w-100">Guardar</button>
-        <a href="/Eventos" class="btn btn-secondary w-100 mt-2">Cancelar</a>
-    </form>
-</div>
+    <div class="col-12 text-center mt-4">
+        <button type="submit" class="btn btn-success px-4">
+            <i class="bi bi-save"></i> Guardar Evento
+        </button>
+        <a asp-action="Index" class="btn btn-secondary px-4">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

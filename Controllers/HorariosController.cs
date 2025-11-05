@@ -19,28 +19,25 @@ namespace ProyectoLuisa.Controllers
             return rol == "Docente" || rol == "Admin";
         }
 
-        // 🟢 Vista pública con filtro por sección
-        public IActionResult Index(string? seccion)
+        // GET: /Horarios
+        public IActionResult Index(string? dia, string? grupo, string? profesor)
         {
-            var secciones = _context.Horarios
-                .Select(h => h.Seccion)
-                .Distinct()
-                .OrderBy(s => s)
-                .ToList();
+            var horarios = _context.Horarios.AsQueryable();
 
-            ViewBag.Secciones = secciones;
-            ViewBag.SeccionSeleccionada = seccion;
+            if (!string.IsNullOrEmpty(dia))
+                horarios = horarios.Where(h => h.DiaSemana.Contains(dia));
 
-            var horarios = _context.Horarios
-                .Where(h => h.Publicado && (string.IsNullOrEmpty(seccion) || h.Seccion == seccion))
-                .OrderBy(h => h.DiaSemana)
-                .ThenBy(h => h.HoraInicio)
-                .ToList();
+            if (!string.IsNullOrEmpty(grupo))
+                horarios = horarios.Where(h => h.Grupo.Contains(grupo));
 
-            return View(horarios);
+            if (!string.IsNullOrEmpty(profesor))
+                horarios = horarios.Where(h => h.Profesor.Contains(profesor));
+
+            ViewBag.EsDocenteOAdmin = EsDocenteOAdmin();
+            return View(horarios.ToList());
         }
 
-        // 👩‍🏫 Crear horario (solo docente o admin)
+        // GET: /Horarios/Crear
         public IActionResult Crear()
         {
             if (!EsDocenteOAdmin())
@@ -49,7 +46,9 @@ namespace ProyectoLuisa.Controllers
             return View();
         }
 
+        // POST: /Horarios/Crear
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Crear(Horario model)
         {
             if (!EsDocenteOAdmin())
@@ -58,26 +57,27 @@ namespace ProyectoLuisa.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            model.DocenteId = HttpContext.Session.GetInt32("UsuarioId") ?? 0;
             _context.Horarios.Add(model);
             _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
-        // 🟡 Editar horario
+        // GET: /Horarios/Editar/5
         public IActionResult Editar(int id)
         {
             if (!EsDocenteOAdmin())
                 return View("~/Views/Shared/AccesoDenegado.cshtml");
 
             var horario = _context.Horarios.Find(id);
-            if (horario == null) return NotFound();
+            if (horario == null)
+                return NotFound();
 
             return View(horario);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Editar(Horario model)
         {
             if (!EsDocenteOAdmin())
@@ -88,7 +88,6 @@ namespace ProyectoLuisa.Controllers
 
             _context.Horarios.Update(model);
             _context.SaveChanges();
-
             return RedirectToAction("Index");
         }
 
@@ -99,7 +98,8 @@ namespace ProyectoLuisa.Controllers
                 return View("~/Views/Shared/AccesoDenegado.cshtml");
 
             var horario = _context.Horarios.Find(id);
-            if (horario == null) return NotFound();
+            if (horario == null)
+                return NotFound();
 
             _context.Horarios.Remove(horario);
             _context.SaveChanges();

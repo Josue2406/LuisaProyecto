@@ -1,0 +1,51 @@
+@model IEnumerable<ProyectoLuisa.Models.Archivo>
+@{
+    ViewData["Title"] = "Gestión de Archivos";
+    bool esAdmin = ViewBag.EsDocenteOAdmin;
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Gestión de Archivos</h2>
+
+    @if (esAdmin)
+    {
+        <a asp-action="Subir" class="btn btn-success mb-3">
+            <i class="bi bi-upload"></i> Subir nuevo archivo
+        </a>
+    }
+
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var a in Model)
+        {
+            <tr>
+                <td>@a.Nombre</td>
+                <td>@a.Descripcion</td>
+                <td>@a.FechaSubida.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a href="@a.Ruta" class="btn btn-primary btn-sm" target="_blank">
+                        <i class="bi bi-download"></i> Ver / Descargar
+                    </a>
+                    @if (esAdmin)
+                    {
+                        <form asp-action="Eliminar" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@a.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

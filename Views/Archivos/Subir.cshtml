@@ -1,0 +1,22 @@
+@{
+    ViewData["Title"] = "Subir archivo";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Subir nuevo archivo</h2>
+
+    <form asp-action="Subir" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label">Seleccione archivo</label>
+            <input type="file" name="archivo" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea name="descripcion" class="form-control" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success px-4">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary px-4 ms-2">Cancelar</a>
+    </form>
+</div>

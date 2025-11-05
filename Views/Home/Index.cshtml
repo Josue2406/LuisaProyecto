@@ -1,107 +1,60 @@
 ﻿@{
     ViewData["Title"] = "Inicio";
     var eventos = ViewBag.Eventos as List<ProyectoLuisa.Models.Evento>;
-    var horarios = ViewBag.Horarios as List<ProyectoLuisa.Models.Horario>;
-    var info = ViewBag.Info as ProyectoLuisa.Models.InformacionInstitucional;
 }
 
-<!-- Banner -->
-<div class="bg-primary text-white text-center py-5 mb-5">
-    <h1>@(info?.FooterTexto ?? "Bienvenidos a la Plataforma Educativa Luisa")</h1>
-    <p>Conectando docentes, estudiantes y comunidad educativa</p>
-</div>
+<div class="container my-5">
+    <h2 class="text-center mb-4 fw-bold text-primary">🎉 Próximos Eventos</h2>
 
-<!-- Misión y Visión -->
-<div class="row mb-5">
-    <div class="col-md-6">
-        <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-                <h3 class="text-primary mb-3">🎯 Misión</h3>
-                <p>@(info?.Mision ?? "Agrega la misión en la sección de Información Institucional.")</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-                <h3 class="text-success mb-3">🌱 Visión</h3>
-                <p>@(info?.Vision ?? "Agrega la visión en la sección de Información Institucional.")</p>
-            </div>
-        </div>
-    </div>
-</div>
+    @if (eventos != null && eventos.Count > 0)
+    {
+        <div class="row g-4">
+            @foreach (var e in eventos)
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="card shadow-sm h-100 border-0 hover-zoom">
+                        @if (!string.IsNullOrEmpty(e.ImagenUrl))
+                        {
+                            <img src="@e.ImagenUrl"
+                                 alt="@e.Titulo"
+                                 class="card-img-top rounded-top"
+                                 style="height: 220px; object-fit: cover;" />
+                        }
 
-<!-- Imagen institucional -->
-@if (!string.IsNullOrEmpty(info?.LogoUrl))
-{
-    <div class="text-center mb-5">
-        <img src="@info.LogoUrl" class="img-fluid rounded shadow-sm" style="max-height:300px; object-fit:cover;">
-    </div>
-}
-else
-{
-    <div class="text-center mb-5">
-        <img src="https://significado.com/img/cultura/escuela-interor-aula.jpg" class="img-fluid rounded shadow-sm" style="max-height:300px; object-fit:cover;">
-    </div>
-}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-primary fw-bold">@e.Titulo</h5>
+                            <p class="card-text text-muted small mb-2">
+                                <i class="bi bi-calendar-event"></i> @e.Fecha.ToString("dd/MM/yyyy")
+                            </p>
 
-<!-- Eventos públicos -->
-<h2 class="mb-3 text-center text-primary">📅 Últimos Eventos</h2>
-@if (eventos?.Count > 0)
-{
-    <div class="row mb-5">
-        @foreach (var e in eventos)
-        {
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm border-0">
-                    @if (!string.IsNullOrEmpty(e.ImagenUrl))
-                    {
-                        <img src="@e.ImagenUrl" class="card-img-top" style="height:180px; object-fit:cover;">
-                    }
-                    <div class="card-body">
-                        <h5 class="fw-bold">@e.Titulo</h5>
-                        <p>@e.Descripcion</p>
-                        <small class="text-muted">Fecha: @e.Fecha.ToString("dd/MM/yyyy")</small>
+                            <p class="card-text text-secondary flex-grow-1">
+                                @(e.Descripcion.Length > 100 ? e.Descripcion.Substring(0, 100) + "..." : e.Descripcion)
+                            </p>
+
+                            <a asp-controller="Eventos" asp-action="Detalles" asp-route-id="@e.Id"
+                               class="btn btn-outline-primary mt-auto w-100">
+                                <i class="bi bi-eye"></i> Ver más
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
-else
-{
-    <p class="text-center text-muted">No hay eventos publicados por ahora.</p>
-}
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center mt-4 shadow-sm">
+            <i class="bi bi-info-circle"></i> No hay eventos publicados en este momento.
+        </div>
+    }
+</div>
 
-<!-- Horarios públicos -->
-<h2 class="mb-3 text-center text-success">🕓 Horarios Públicos</h2>
-@if (horarios?.Count > 0)
-{
-    <div class="table-responsive mb-5">
-        <table class="table table-striped shadow-sm">
-            <thead class="table-success">
-                <tr>
-                    <th>Materia</th>
-                    <th>Día</th>
-                    <th>Hora Inicio</th>
-                    <th>Hora Fin</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var h in horarios)
-                {
-                    <tr>
-                        <td>@h.Materia</td>
-                        <td>@h.DiaSemana</td>
-                        <td>@h.HoraInicio</td>
-                        <td>@h.HoraFin</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-}
-else
-{
-    <p class="text-center text-muted">Aún no se han publicado horarios.</p>
-}
+<style>
+    /* Animación sutil al pasar el mouse */
+    .hover-zoom {
+        transition: transform 0.3s ease-in-out;
+    }
+    .hover-zoom:hover {
+        transform: translateY(-5px) scale(1.02);
+    }
+</style>

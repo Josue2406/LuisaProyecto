@@ -55,6 +55,8 @@
                     <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="/Eventos">Eventos</a></li>
                     <li class="nav-item"><a class="nav-link" href="/Horarios">Horarios</a></li>
+                    
+
 
                     <!-- Solo visible para Admin o Docente -->
                     @if (Context.Session.GetString("Rol") == "Admin" || Context.Session.GetString("Rol") == "Docente")
@@ -64,6 +66,11 @@
                                 <i class="bi bi-gear"></i> Información
                             </a>
                         </li>
+                        <li class="nav-item">
+        <a class="nav-link text-success fw-semibold" asp-controller="Archivos" asp-action="Index">
+            <i class="bi bi-folder2-open"></i> Archivos
+        </a>
+    </li>
                     }
 
                     <!-- Paneles según rol -->
@@ -133,5 +140,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+
 </body>
 </html>

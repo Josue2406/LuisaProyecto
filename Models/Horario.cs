@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProyectoLuisa.Models
 {
+  using System.ComponentModel.DataAnnotations;
+
+
     public class Horario
     {
         [Key]
@@ -10,7 +13,7 @@ namespace ProyectoLuisa.Models
         [Required, StringLength(100)]
         public string Materia { get; set; } = string.Empty;
 
-        [Required, StringLength(50)]
+        [Required, StringLength(20)]
         public string DiaSemana { get; set; } = string.Empty;
 
         [Required]
@@ -19,14 +22,16 @@ namespace ProyectoLuisa.Models
         [Required]
         public TimeSpan HoraFin { get; set; }
 
-         [Required, StringLength(50)]
-        public string Seccion { get; set; } = string.Empty;
+        [Required, StringLength(50)]
+        public string Aula { get; set; } = string.Empty;
 
+        [Required, StringLength(20)]
+        public string Grupo { get; set; } = string.Empty;
 
-        // Relación con el docente
-        public int DocenteId { get; set; }
-        public Usuario? Docente { get; set; }
+        [Required, StringLength(100)]
+        public string Profesor { get; set; } = string.Empty;
 
-        public bool Publicado { get; set; } = true;
+        public string? Seccion { get; set; }
     }
 }
+

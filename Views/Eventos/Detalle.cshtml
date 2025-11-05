@@ -1,0 +1,73 @@
+@model ProyectoLuisa.Models.Evento
+
+@{
+    ViewData["Title"] = "Detalles del Evento";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="row g-0">
+            @if (!string.IsNullOrEmpty(Model.ImagenUrl))
+            {
+                <div class="col-md-5">
+                    <img src="@Model.ImagenUrl"
+                         alt="@Model.Titulo"
+                         class="img-fluid rounded-start w-100 h-100 object-fit-cover" />
+                </div>
+            }
+
+            <div class="col-md-7">
+                <div class="card-body p-4">
+                    <h2 class="card-title mb-3 text-primary fw-bold">@Model.Titulo</h2>
+
+                    <p class="text-muted mb-2">
+                        <i class="bi bi-calendar-event"></i>
+                        @Model.Fecha.ToString("dd/MM/yyyy")
+                    </p>
+
+                    <hr />
+
+                    <p class="card-text fs-5">
+                        @Model.Descripcion
+                    </p>
+
+                    <hr />
+
+                    <p class="mb-3">
+                        <strong>Estado:</strong>
+                        @if (Model.Publicado)
+                        {
+                            <span class="badge bg-success">Publicado</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">No publicado</span>
+                        }
+                    </p>
+
+                    <p>
+                        <strong>Docente creador:</strong>
+                        @(Model.Docente?.Nombre ?? "Sin asignar")
+                    </p>
+
+                    <div class="mt-4">
+                        <a asp-action="Index" class="btn btn-secondary px-4">
+                            <i class="bi bi-arrow-left"></i> Volver
+                        </a>
+
+                        @if (Context.Session.GetString("Rol") == "Docente" || Context.Session.GetString("Rol") == "Admin")
+                        {
+                            <a asp-action="Editar" asp-route-id="@Model.Id" class="btn btn-primary px-4">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,58 @@
+@model ProyectoLuisa.Models.Horario
+
+@{
+    ViewData["Title"] = "Detalles del Horario";
+    var rol = Context.Session.GetString("Rol");
+}
+
+<div class="container my-5">
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-primary text-white text-center">
+            <h3 class="mb-0">📘 Detalles del Horario</h3>
+        </div>
+
+        <div class="card-body p-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-4">Materia:</dt>
+                <dd class="col-sm-8">@Model.Materia</dd>
+
+                <dt class="col-sm-4">Profesor:</dt>
+                <dd class="col-sm-8">@Model.Profesor</dd>
+
+                <dt class="col-sm-4">Día de la Semana:</dt>
+                <dd class="col-sm-8">@Model.DiaSemana</dd>
+
+                <dt class="col-sm-4">Hora de Inicio:</dt>
+                <dd class="col-sm-8">@Model.HoraInicio.ToString(@"hh\:mm")</dd>
+
+                <dt class="col-sm-4">Hora de Finalización:</dt>
+                <dd class="col-sm-8">@Model.HoraFin.ToString(@"hh\:mm")</dd>
+
+                <dt class="col-sm-4">Aula:</dt>
+                <dd class="col-sm-8">@Model.Aula</dd>
+
+                <dt class="col-sm-4">Grupo:</dt>
+                <dd class="col-sm-8">@Model.Grupo</dd>
+
+                @if (!string.IsNullOrEmpty(Model.Seccion))
+                {
+                    <dt class="col-sm-4">Sección:</dt>
+                    <dd class="col-sm-8">@Model.Seccion</dd>
+                }
+            </dl>
+        </div>
+
+        <div class="card-footer text-center bg-light">
+            <a asp-action="Index" class="btn btn-secondary px-4">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+
+            @if (rol == "Docente" || rol == "Admin")
+            {
+                <a asp-action="Editar" asp-route-id="@Model.Id" class="btn btn-primary px-4 ms-2">
+                    <i class="bi bi-pencil"></i> Editar
+                </a>
+            }
+        </div>
+    </div>
+</div>

@@ -72,5 +72,15 @@ namespace ProyectoLuisa.Controllers
                     return View();
             }
         }
+
+        public IActionResult Logout()
+{
+    // Eliminar variables de sesión
+    HttpContext.Session.Clear();
+
+    // Redirigir al inicio
+    return RedirectToAction("Index", "Home");
+}
+
     }
 }

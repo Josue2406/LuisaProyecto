@@ -18,20 +18,21 @@ namespace ProyectoLuisa.Controllers
 
         public IActionResult Index()
         {
-            // 🔹 Cargar la información institucional
+            // 🔹 Información institucional
             var info = _context.InformacionInstitucional.FirstOrDefault();
             ViewBag.Info = info;
 
-            // 🔹 Mostrar los últimos eventos publicados
+            // 🔹 Últimos eventos publicados
             var eventos = _context.Eventos
-                .Where(e => e.Publicado)
-                .OrderByDescending(e => e.Fecha)
-                .Take(3)
-                .ToList();
+    .Where(e => e.Publicado)
+    .OrderByDescending(e => e.Fecha)
+    .Take(3)
+    .ToList();
+ViewBag.Eventos = eventos;
 
-            // 🔹 Mostrar horarios públicos
+
+            // 🔹 Horarios públicos (sin filtro 'Publicado')
             var horarios = _context.Horarios
-                .Where(h => h.Publicado)
                 .OrderBy(h => h.DiaSemana)
                 .ThenBy(h => h.HoraInicio)
                 .Take(5)
@@ -55,7 +56,10 @@ namespace ProyectoLuisa.Controllers
         {
             var info = _context.InformacionInstitucional.FirstOrDefault();
             ViewBag.Info = info;
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel 
+            { 
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier 
+            });
         }
     }
 }
