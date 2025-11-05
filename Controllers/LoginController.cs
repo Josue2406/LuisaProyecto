@@ -17,6 +17,30 @@ namespace ProyectoLuisa.Controllers
 
         public IActionResult Index() => View();
 
+
+       [HttpGet("/Recuperar")]
+public IActionResult Recuperar()
+{
+    return View("~/Views/Account/Recuperar.cshtml");
+}
+
+[HttpPost("/Recuperar")]
+public IActionResult Recuperar(string email)
+{
+    if (string.IsNullOrEmpty(email))
+    {
+        ViewBag.Mensaje = "Por favor, ingresa tu correo electrónico.";
+        return View("~/Views/Account/Recuperar.cshtml");
+    }
+
+    // Simulación de envío de enlace
+    ViewBag.Mensaje = $"Se ha enviado un enlace de recuperación al correo: {email}";
+    ViewBag.Exito = true;
+    return View("~/Views/Account/Recuperar.cshtml");
+}
+
+
+
         [HttpPost]
         public IActionResult Index(string correo, string contrasena)
         {
