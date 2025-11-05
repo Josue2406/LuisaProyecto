@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using ProyectoLuisa.Data;
 using ProyectoLuisa.Models;
 using ProyectoLuisa.Services;
@@ -20,6 +21,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 
+var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "archivos");
+
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
 // Servicio de correos
 builder.Services.AddScoped<EmailService>();
 
@@ -71,7 +78,12 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); // importante para servir CSS, JS e imágenes
+//app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads/archivos"
+}); // importante para servir CSS, JS e imágenes
 app.UseRouting();
 app.UseSession();
 app.UseAuthorization();

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 using ProyectoLuisa.Data;
 using ProyectoLuisa.Models;
 
@@ -37,7 +38,7 @@ namespace ProyectoLuisa.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Subir(IFormFile archivo, string descripcion)
+        public async Task<IActionResult> Subir(IFormFile archivo, string descripcion)
         {
             if (!EsDocenteOAdmin())
                 return View("~/Views/Shared/AccesoDenegado.cshtml");
@@ -48,24 +49,25 @@ namespace ProyectoLuisa.Controllers
                 return View();
             }
 
-            // Carpeta donde se guardarán
-            string carpeta = Path.Combine(_env.WebRootPath, "uploads/archivos");
-            Directory.CreateDirectory(carpeta);
+            // 📂 Carpeta donde se guardarán los archivos
+            string uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", "archivos");
+            Directory.CreateDirectory(uploadsFolder);
 
-            // Generar nombre único
-            string fileName = Guid.NewGuid() + Path.GetExtension(archivo.FileName);
-            string rutaArchivo = Path.Combine(carpeta, fileName);
+            // 🧾 Generar nombre único
+            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(archivo.FileName);
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-            using (var stream = new FileStream(rutaArchivo, FileMode.Create))
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-                archivo.CopyTo(stream);
+                await archivo.CopyToAsync(fileStream);
             }
 
+            // 🧠 Guardar registro en la base de datos
             var nuevo = new Archivo
             {
                 Nombre = archivo.FileName,
                 Descripcion = descripcion,
-                Ruta = "/uploads/archivos/" + fileName,
+                Ruta = uniqueFileName, // ✅ Guardamos solo el nombre
                 FechaSubida = DateTime.Now,
                 SubidoPor = HttpContext.Session.GetString("Usuario") ?? "Desconocido"
             };
@@ -86,7 +88,7 @@ namespace ProyectoLuisa.Controllers
             if (archivo == null)
                 return NotFound();
 
-            string rutaFisica = Path.Combine(_env.WebRootPath, archivo.Ruta.TrimStart('/'));
+            string rutaFisica = Path.Combine(_env.WebRootPath, "uploads", "archivos", archivo.Ruta);
             if (System.IO.File.Exists(rutaFisica))
                 System.IO.File.Delete(rutaFisica);
 
