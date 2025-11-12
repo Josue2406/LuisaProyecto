@@ -10,6 +10,10 @@
     <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
     <style>
         body {
@@ -52,45 +56,67 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Eventos">Eventos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Horarios">Horarios</a></li>
-                    
+    <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+    <li class="nav-item"><a class="nav-link" href="/Eventos">Eventos</a></li>
 
+<!-- Público -->
+<li class="nav-item">
+  <a class="nav-link" asp-area="Public" asp-controller="Horarios" asp-action="Index">
+    Horarios (Público)
+  </a>
+</li>
 
-                    <!-- Solo visible para Admin o Docente -->
-                    @if (Context.Session.GetString("Rol") == "Admin" || Context.Session.GetString("Rol") == "Docente")
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-success fw-semibold" href="/Informacion/Index">
-                                <i class="bi bi-gear"></i> Información
-                            </a>
-                        </li>
-                        <li class="nav-item">
-        <a class="nav-link text-success fw-semibold" asp-controller="Archivos" asp-action="Index">
-            <i class="bi bi-folder2-open"></i> Archivos
+<!-- Admin -->
+@if (Context.Session.GetString("Rol") == "Admin" || Context.Session.GetString("Rol") == "Docente")
+{
+  <li class="nav-item">
+    <a class="nav-link text-primary fw-semibold" asp-area="Admin" asp-controller="Horarios" asp-action="Index">
+      Panel Horarios (Admin)
+    </a>
+  </li>
+}
+
+    <!-- 🔹 Público: todos pueden acceder -->
+    <li class="nav-item">
+        <a class="nav-link fw-bold text-primary" asp-controller="Horarios" asp-action="Publico">
+            <i class="bi bi-calendar-week"></i> Horarios
         </a>
     </li>
-                    }
 
-                    <!-- Paneles según rol -->
-                    @if (Context.Session.GetString("Rol") == "Admin")
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-primary fw-semibold" href="/Admin">
-                                <i class="bi bi-speedometer2"></i> Panel Admin
-                            </a>
-                        </li>
-                    }
-                    else if (Context.Session.GetString("Rol") == "Docente")
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-primary fw-semibold" href="/Docente/Inicio">
-                                <i class="bi bi-journal-text"></i> Panel Docente
-                            </a>
-                        </li>
-                    }
-                </ul>
+    <!-- 🔹 Solo visible para Docente o Admin -->
+    @if (Context.Session.GetString("Rol") == "Admin" || Context.Session.GetString("Rol") == "Docente")
+    {
+        <li class="nav-item">
+            <a class="nav-link text-success fw-semibold" asp-controller="Informacion" asp-action="Index">
+                <i class="bi bi-gear"></i> Información
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-success fw-semibold" asp-controller="Archivos" asp-action="Index">
+                <i class="bi bi-folder2-open"></i> Archivos
+            </a>
+        </li>
+    }
+
+    <!-- 🔹 Paneles según rol -->
+    @if (Context.Session.GetString("Rol") == "Admin")
+    {
+        <li class="nav-item">
+            <a class="nav-link text-primary fw-semibold" href="/Admin">
+                <i class="bi bi-speedometer2"></i> Panel Admin
+            </a>
+        </li>
+    }
+    else if (Context.Session.GetString("Rol") == "Docente")
+    {
+        <li class="nav-item">
+            <a class="nav-link text-primary fw-semibold" href="/Docente/Inicio">
+                <i class="bi bi-journal-text"></i> Panel Docente
+            </a>
+        </li>
+    }
+</ul>
+
 
                 <!-- 🔹 Login o usuario activo -->
                 @if (Context.Session.GetString("Nombre") == null)

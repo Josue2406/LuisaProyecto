@@ -1,0 +1,96 @@
+@model IEnumerable<ProyectoLuisa.Models.Horario>
+
+@{
+    ViewData["Title"] = "Vista Semanal de Horarios";
+    var dias = new[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes" };
+    var colores = new[] { "bg-primary", "bg-success", "bg-warning", "bg-danger", "bg-info" };
+}
+
+<div class="container mt-4 mb-5">
+    <h2 class="text-center fw-bold text-primary mb-4">
+        <i class="bi bi-calendar3-week"></i> Vista Semanal de Horarios
+    </h2>
+
+    <form method="get" class="mb-4 text-center">
+        <label class="fw-bold me-2">Filtrar por Sección:</label>
+        <select name="seccionSeleccionada" class="form-select d-inline-block w-auto">
+            <option value="">Todas</option>
+            @foreach (var sec in ViewBag.Secciones)
+            {
+                <option value="@sec" selected="@(ViewBag.SeccionSeleccionada == sec)">
+                    @sec
+                </option>
+            }
+        </select>
+        <button type="submit" class="btn btn-primary ms-2">
+            <i class="bi bi-search"></i> Ver
+        </button>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle text-center">
+            <thead class="table-primary">
+                <tr>
+                    <th style="width: 8rem;">Hora</th>
+                    @foreach (var dia in dias)
+                    {
+                        <th>@dia</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var horaInicio = new TimeSpan(7, 0, 0);
+                    var horaFin = new TimeSpan(22, 0, 0);
+                    var intervalo = new TimeSpan(1, 30, 0); // bloques de 1h30
+                    var bloques = Enumerable.Range(0, (int)((horaFin - horaInicio).TotalMinutes / 90))
+                        .Select(i => horaInicio + TimeSpan.FromMinutes(i * 90))
+                        .ToList();
+
+                    int colorIndex = 0;
+                }
+
+                @foreach (var bloqueInicio in bloques)
+                {
+                    var bloqueFin = bloqueInicio + intervalo;
+                    <tr>
+                        <td class="fw-bold">@bloqueInicio.ToString(@"hh\:mm") - @bloqueFin.ToString(@"hh\:mm")</td>
+
+                        @foreach (var dia in dias)
+                        {
+                            var clases = Model
+                                .Where(h => h.DiaSemana == dia &&
+                                            ((h.HoraInicio >= bloqueInicio && h.HoraInicio < bloqueFin) ||
+                                             (h.HoraFin > bloqueInicio && h.HoraFin <= bloqueFin)))
+                                .ToList();
+
+                            if (clases.Any())
+                            {
+                                <td class="text-white fw-semibold rounded-3 p-2 @colores[colorIndex % colores.Length]">
+                                    @foreach (var c in clases)
+                                    {
+                                        <div>
+                                            <i class="bi bi-book"></i> @c.Materia <br />
+                                            <small>@c.Aula — @c.Profesor</small>
+                                        </div>
+                                    }
+                                </td>
+                                colorIndex++;
+                            }
+                            else
+                            {
+                                <td class="bg-light"></td>
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center mt-4">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>

@@ -32,6 +32,10 @@ namespace ProyectoLuisa.Models
         public string Profesor { get; set; } = string.Empty;
 
         public string? Seccion { get; set; }
+
+
+      
+      
     }
 }
 

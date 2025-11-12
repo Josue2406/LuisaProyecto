@@ -12,8 +12,8 @@ using ProyectoLuisa.Data;
 namespace ProyectoLuisa.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251029192158_AddImagenToEvento")]
-    partial class AddImagenToEvento
+    [Migration("20251111032710_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,40 @@ namespace ProyectoLuisa.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("ProyectoLuisa.Models.Archivo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descripcion")
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<DateTime>("FechaSubida")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("Ruta")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SubidoPor")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Archivos");
+                });
 
             modelBuilder.Entity("ProyectoLuisa.Models.Evento", b =>
                 {
@@ -70,13 +104,20 @@ namespace ProyectoLuisa.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("DiaSemana")
+                    b.Property<string>("Aula")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("DocenteId")
-                        .HasColumnType("int");
+                    b.Property<string>("DiaSemana")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Grupo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<TimeSpan>("HoraFin")
                         .HasColumnType("time(6)");
@@ -89,14 +130,70 @@ namespace ProyectoLuisa.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<bool>("Publicado")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<string>("Profesor")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Seccion")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DocenteId");
-
                     b.ToTable("Horarios");
+                });
+
+            modelBuilder.Entity("ProyectoLuisa.Models.InformacionInstitucional", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Correo")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("FooterTexto")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<string>("LogoUrl")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Mision")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Valores")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("Vision")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InformacionInstitucional");
                 });
 
             modelBuilder.Entity("ProyectoLuisa.Models.PasswordResetToken", b =>
@@ -164,17 +261,6 @@ namespace ProyectoLuisa.Migrations
                 });
 
             modelBuilder.Entity("ProyectoLuisa.Models.Evento", b =>
-                {
-                    b.HasOne("ProyectoLuisa.Models.Usuario", "Docente")
-                        .WithMany()
-                        .HasForeignKey("DocenteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Docente");
-                });
-
-            modelBuilder.Entity("ProyectoLuisa.Models.Horario", b =>
                 {
                     b.HasOne("ProyectoLuisa.Models.Usuario", "Docente")
                         .WithMany()

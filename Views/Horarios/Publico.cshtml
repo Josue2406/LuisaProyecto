@@ -1,0 +1,153 @@
+@model Dictionary<string, List<ProyectoLuisa.Models.Horario>>
+@{
+    ViewData["Title"] = "Consulta Pública de Horarios";
+    var secciones = ViewBag.Secciones as List<string>;
+    var seleccion = ViewBag.SeccionSeleccionada as string;
+    var verTodos = ViewBag.VerTodos as bool? ?? false;
+
+    // Paleta de colores (Bootstrap)
+    var colores = new[] { "primary", "success", "warning", "danger", "info", "secondary", "dark" };
+    int colorIndex = 0;
+}
+
+<div class="container mt-4 mb-5">
+    <h2 class="text-center text-primary fw-bold mb-4">
+        📘 Consulta Pública de Horarios
+    </h2>
+
+    <div class="alert alert-info text-center mb-4">
+        <i class="bi bi-search"></i> Selecciona una sección o visualiza todos los horarios agrupados.
+    </div>
+
+    <form method="get" class="text-center mb-4">
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <select name="seccionSeleccionada" class="form-select w-auto">
+                <option value="">-- Seleccione Sección --</option>
+                @foreach (var s in secciones)
+                {
+                    <option value="@s" selected="@(s == seleccion)">
+                        @s
+                    </option>
+                }
+            </select>
+            <button type="submit" class="btn btn-primary fw-bold">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+            <a asp-action="Publico" class="btn btn-secondary fw-bold">
+                <i class="bi bi-x-circle"></i> Limpiar
+            </a>
+            <a asp-action="Publico" asp-route-verTodos="true" class="btn btn-success fw-bold">
+                <i class="bi bi-collection"></i> Ver Todos los Horarios
+            </a>
+        </div>
+    </form>
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="alert alert-warning text-center">
+            <i class="bi bi-exclamation-circle"></i> No hay horarios registrados para esta selección.
+        </div>
+    }
+    else
+    {
+        if (verTodos)
+        {
+            <div class="accordion" id="accordionSecciones">
+                @foreach (var grupo in Model)
+                {
+                    var collapseId = $"collapse_{grupo.Key.Replace(" ", "_")}";
+                    var color = colores[colorIndex % colores.Length];
+                    colorIndex++;
+
+                    <div class="accordion-item mb-3 shadow-sm border-@color">
+                        <h2 class="accordion-header" id="heading_@grupo.Key">
+                            <button class="accordion-button collapsed fw-bold text-white bg-@color" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false"
+                                    aria-controls="@collapseId">
+                                <i class="bi bi-book me-2"></i> Sección @grupo.Key
+                            </button>
+                        </h2>
+                        <div id="@collapseId" class="accordion-collapse collapse" data-bs-parent="#accordionSecciones">
+                            <div class="accordion-body bg-light">
+                                <table class="table table-striped table-bordered text-center align-middle mb-0">
+                                    <thead class="table-@color text-white">
+                                        <tr>
+                                            <th>Materia</th>
+                                            <th>Día</th>
+                                            <th>Hora Inicio</th>
+                                            <th>Hora Fin</th>
+                                            <th>Aula</th>
+                                            <th>Grupo</th>
+                                            <th>Profesor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var h in grupo.Value)
+                                        {
+                                            <tr>
+                                                <td>@h.Materia</td>
+                                                <td>@h.DiaSemana</td>
+                                                <td>@h.HoraInicio.ToString(@"hh\:mm")</td>
+                                                <td>@h.HoraFin.ToString(@"hh\:mm")</td>
+                                                <td>@h.Aula</td>
+                                                <td>@h.Grupo</td>
+                                                <td>@h.Profesor</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            @foreach (var grupo in Model)
+            {
+                var color = colores[colorIndex % colores.Length];
+                colorIndex++;
+
+                <div class="card shadow-sm mb-4 border-@color">
+                    <div class="card-header bg-@color text-white fw-bold">
+                        <i class="bi bi-book"></i> Sección @grupo.Key
+                    </div>
+                    <div class="card-body bg-light">
+                        <table class="table table-bordered table-hover text-center align-middle mb-0">
+                            <thead class="table-@color text-white">
+                                <tr>
+                                    <th>Materia</th>
+                                    <th>Día</th>
+                                    <th>Hora Inicio</th>
+                                    <th>Hora Fin</th>
+                                    <th>Aula</th>
+                                    <th>Grupo</th>
+                                    <th>Profesor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var h in grupo.Value)
+                                {
+                                    <tr>
+                                        <td>@h.Materia</td>
+                                        <td>@h.DiaSemana</td>
+                                        <td>@h.HoraInicio.ToString(@"hh\:mm")</td>
+                                        <td>@h.HoraFin.ToString(@"hh\:mm")</td>
+                                        <td>@h.Aula</td>
+                                        <td>@h.Grupo</td>
+                                        <td>@h.Profesor</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+}

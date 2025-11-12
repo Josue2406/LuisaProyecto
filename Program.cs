@@ -92,10 +92,23 @@ app.UseAuthorization();
 // 🧭 Rutas
 // ------------------------------------------------------------------
 
-// Por defecto, redirige al Login
+/* Por defecto, redirige al Login
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}"
 );
+*/
+// 👇 Nuevo: soporte para áreas (no cambia nada de lo actual)
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
+
+// ✅ Deja tu ruta por defecto como la tienes (Login)
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Login}/{action=Index}/{id?}"
+);
+
 
 app.Run();
