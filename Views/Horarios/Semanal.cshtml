@@ -1,9 +1,17 @@
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
 @model IEnumerable<ProyectoLuisa.Models.Horario>
 
 @{
     ViewData["Title"] = "Vista Semanal de Horarios";
+
     var dias = new[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes" };
     var colores = new[] { "bg-primary", "bg-success", "bg-warning", "bg-danger", "bg-info" };
+
+    // Diccionario que viene desde el controlador
+    var docentes = ViewBag.Docentes as Dictionary<int, string>;
 }
 
 <div class="container mt-4 mb-5">
@@ -38,11 +46,13 @@
                     }
                 </tr>
             </thead>
+
             <tbody>
                 @{
                     var horaInicio = new TimeSpan(7, 0, 0);
                     var horaFin = new TimeSpan(22, 0, 0);
-                    var intervalo = new TimeSpan(1, 30, 0); // bloques de 1h30
+                    var intervalo = new TimeSpan(1, 30, 0);
+
                     var bloques = Enumerable.Range(0, (int)((horaFin - horaInicio).TotalMinutes / 90))
                         .Select(i => horaInicio + TimeSpan.FromMinutes(i * 90))
                         .ToList();
@@ -53,15 +63,20 @@
                 @foreach (var bloqueInicio in bloques)
                 {
                     var bloqueFin = bloqueInicio + intervalo;
+
                     <tr>
-                        <td class="fw-bold">@bloqueInicio.ToString(@"hh\:mm") - @bloqueFin.ToString(@"hh\:mm")</td>
+                        <td class="fw-bold">
+                            @bloqueInicio.ToString(@"hh\:mm") – @bloqueFin.ToString(@"hh\:mm")
+                        </td>
 
                         @foreach (var dia in dias)
                         {
                             var clases = Model
                                 .Where(h => h.DiaSemana == dia &&
-                                            ((h.HoraInicio >= bloqueInicio && h.HoraInicio < bloqueFin) ||
-                                             (h.HoraFin > bloqueInicio && h.HoraFin <= bloqueFin)))
+                                            (
+                                                (h.HoraInicio >= bloqueInicio && h.HoraInicio < bloqueFin) ||
+                                                (h.HoraFin > bloqueInicio && h.HoraFin <= bloqueFin)
+                                            ))
                                 .ToList();
 
                             if (clases.Any())
@@ -71,10 +86,22 @@
                                     {
                                         <div>
                                             <i class="bi bi-book"></i> @c.Materia <br />
-                                            <small>@c.Aula — @c.Profesor</small>
+
+                                            <small>
+                                                @{
+                                                    string docente;
+                                                    if (docentes != null && docentes.ContainsKey(c.DocenteId))
+                                                        docente = docentes[c.DocenteId];
+                                                    else
+                                                        docente = "Docente no registrado";
+                                                }
+
+                                                @docente — Aula @c.Aula
+                                            </small>
                                         </div>
                                     }
                                 </td>
+
                                 colorIndex++;
                             }
                             else

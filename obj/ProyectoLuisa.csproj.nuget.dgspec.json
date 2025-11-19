@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\danie\\OneDrive\\Escritorio\\GU\\LuisaProyecto\\ProyectoLuisa.csproj": {}
+    "C:\\Users\\danie\\OneDrive\\Escritorio\\asd2\\LuisaProyecto\\ProyectoLuisa.csproj": {}
   },
   "projects": {
-    "C:\\Users\\danie\\OneDrive\\Escritorio\\GU\\LuisaProyecto\\ProyectoLuisa.csproj": {
+    "C:\\Users\\danie\\OneDrive\\Escritorio\\asd2\\LuisaProyecto\\ProyectoLuisa.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\danie\\OneDrive\\Escritorio\\GU\\LuisaProyecto\\ProyectoLuisa.csproj",
+        "projectUniqueName": "C:\\Users\\danie\\OneDrive\\Escritorio\\asd2\\LuisaProyecto\\ProyectoLuisa.csproj",
         "projectName": "ProyectoLuisa",
-        "projectPath": "C:\\Users\\danie\\OneDrive\\Escritorio\\GU\\LuisaProyecto\\ProyectoLuisa.csproj",
+        "projectPath": "C:\\Users\\danie\\OneDrive\\Escritorio\\asd2\\LuisaProyecto\\ProyectoLuisa.csproj",
         "packagesPath": "C:\\Users\\danie\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\danie\\OneDrive\\Escritorio\\GU\\LuisaProyecto\\obj\\",
+        "outputPath": "C:\\Users\\danie\\OneDrive\\Escritorio\\asd2\\LuisaProyecto\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

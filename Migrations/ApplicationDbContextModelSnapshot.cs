@@ -111,10 +111,8 @@ namespace ProyectoLuisa.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<string>("Grupo")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                    b.Property<int>("DocenteId")
+                        .HasColumnType("int");
 
                     b.Property<TimeSpan>("HoraFin")
                         .HasColumnType("time(6)");
@@ -127,13 +125,10 @@ namespace ProyectoLuisa.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Profesor")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
                     b.Property<string>("Seccion")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.HasKey("Id");
 
@@ -191,6 +186,42 @@ namespace ProyectoLuisa.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("InformacionInstitucional");
+                });
+
+            modelBuilder.Entity("ProyectoLuisa.Models.Noticia", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Contenido")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DescripcionCorta")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ImagenUrl")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Publicada")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Noticias");
                 });
 
             modelBuilder.Entity("ProyectoLuisa.Models.PasswordResetToken", b =>

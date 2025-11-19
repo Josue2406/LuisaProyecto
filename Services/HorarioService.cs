@@ -35,11 +35,11 @@ namespace ProyectoLuisa.Services
             if (conflictoAula)
                 return $"❌ El aula {nuevo.Aula} ya está ocupada ese día y hora.";
 
-            // 3️⃣ Validar conflicto de profesor
-            var conflictoProfesor = await _context.Horarios.AnyAsync(h =>
+            // 3️⃣ Validar conflicto de docente (antes era Profesor)
+            var conflictoDocente = await _context.Horarios.AnyAsync(h =>
                 h.Id != nuevo.Id &&
                 h.DiaSemana == nuevo.DiaSemana &&
-                h.Profesor == nuevo.Profesor &&
+                h.DocenteId == nuevo.DocenteId &&
                 (
                     (nuevo.HoraInicio >= h.HoraInicio && nuevo.HoraInicio < h.HoraFin) ||
                     (nuevo.HoraFin > h.HoraInicio && nuevo.HoraFin <= h.HoraFin) ||
@@ -47,8 +47,8 @@ namespace ProyectoLuisa.Services
                 )
             );
 
-            if (conflictoProfesor)
-                return $"❌ El profesor {nuevo.Profesor} ya tiene una clase asignada en ese horario.";
+            if (conflictoDocente)
+                return $"❌ Este docente ya tiene una clase asignada en ese horario.";
 
             return null; // todo correcto
         }

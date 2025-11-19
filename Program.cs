@@ -29,7 +29,7 @@ if (!Directory.Exists(uploadsPath))
 }
 // Servicio de correos
 builder.Services.AddScoped<EmailService>();
-
+builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -79,11 +79,31 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 //app.UseStaticFiles();
-app.UseStaticFiles(new StaticFileOptions
+/*app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(uploadsPath),
     RequestPath = "/uploads/archivos"
-}); // importante para servir CSS, JS e imágenes
+}); */
+
+
+app.UseStaticFiles();
+// Servir /uploads/eventos
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.WebRootPath, "uploads", "eventos")),
+    RequestPath = "/uploads/eventos"
+});
+
+// Servir /uploads/archivos (esto ya lo tenías)
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.WebRootPath, "uploads", "archivos")),
+    RequestPath = "/uploads/archivos"
+});
+
+ // importante para servir CSS, JS e imágenes
 app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
@@ -98,12 +118,14 @@ app.MapControllerRoute(
     pattern: "{controller=Login}/{action=Index}/{id?}"
 );
 */
-// 👇 Nuevo: soporte para áreas (no cambia nada de lo actual)
+
+
+
 app.MapControllerRoute(
     name: "areas",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-);
+    pattern: "{area:exists}/{controller=Inicio}/{action=Index}/{id?}");
 
+// 👇 Nuevo: soporte para áreas (no cambia nada de lo actual)
 // ✅ Deja tu ruta por defecto como la tienes (Login)
 app.MapControllerRoute(
     name: "default",

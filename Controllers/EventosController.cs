@@ -22,6 +22,7 @@ namespace ProyectoLuisa.Controllers
         }
 
         // 📋 Index: muestra según el rol
+        /*
         public IActionResult Index()
         {
             var eventos = EsDocenteOAdmin()
@@ -29,7 +30,19 @@ namespace ProyectoLuisa.Controllers
                 : _context.Eventos.Where(e => e.Publicado).OrderByDescending(e => e.Fecha).ToList(); // solo publicados
 
             return View(eventos);
-        }
+        }*/
+        public IActionResult Index()
+{
+    if (!EsDocenteOAdmin())
+        return View("~/Views/Shared/AccesoDenegado.cshtml");
+
+    var eventos = _context.Eventos
+        .OrderByDescending(e => e.Fecha)
+        .ToList();
+
+    return View(eventos);
+}
+
 
         // 🟢 Crear evento
         public IActionResult Crear()

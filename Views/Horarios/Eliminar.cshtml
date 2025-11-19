@@ -1,38 +1,49 @@
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
 @model ProyectoLuisa.Models.Horario
 
 @{
     ViewData["Title"] = "Eliminar Horario";
 }
 
-<h2 class="mb-4 text-center text-danger">¿Desea eliminar este horario?</h2>
+<h2 class="mb-4 text-center text-danger fw-bold">
+    ¿Desea eliminar este horario?
+</h2>
 
 <div class="card p-4 shadow-sm">
+
     <dl class="row">
-        <dt class="col-sm-3">Materia</dt>
+        <dt class="col-sm-3 fw-bold">Materia</dt>
         <dd class="col-sm-9">@Model.Materia</dd>
 
-        <dt class="col-sm-3">Día</dt>
+        <dt class="col-sm-3 fw-bold">Día</dt>
         <dd class="col-sm-9">@Model.DiaSemana</dd>
 
-        <dt class="col-sm-3">Hora Inicio</dt>
+        <dt class="col-sm-3 fw-bold">Hora Inicio</dt>
         <dd class="col-sm-9">@Model.HoraInicio.ToString(@"hh\:mm")</dd>
 
-        <dt class="col-sm-3">Hora Fin</dt>
+        <dt class="col-sm-3 fw-bold">Hora Fin</dt>
         <dd class="col-sm-9">@Model.HoraFin.ToString(@"hh\:mm")</dd>
 
-        <dt class="col-sm-3">Aula</dt>
+        <dt class="col-sm-3 fw-bold">Aula</dt>
         <dd class="col-sm-9">@Model.Aula</dd>
 
-        <dt class="col-sm-3">Grupo</dt>
-        <dd class="col-sm-9">@Model.Grupo</dd>
+        <dt class="col-sm-3 fw-bold">Sección</dt>
+        <dd class="col-sm-9">@Model.Seccion</dd>
 
-        <dt class="col-sm-3">Profesor</dt>
-        <dd class="col-sm-9">@Model.Profesor</dd>
+        <dt class="col-sm-3 fw-bold">Docente asignado</dt>
+        <dd class="col-sm-9">@Model.DocenteId</dd>
     </dl>
 
-    <form asp-action="Eliminar" method="post" class="text-center">
+    <form asp-action="Eliminar" method="post" class="text-center mt-4">
         <input type="hidden" asp-for="Id" />
-        <button type="submit" class="btn btn-danger px-4">Eliminar</button>
-        <a asp-action="Index" class="btn btn-secondary px-4">Cancelar</a>
+        <button type="submit" class="btn btn-danger px-4 fw-bold">
+            <i class="bi bi-trash"></i> Eliminar
+        </button>
+        <a asp-action="Index" class="btn btn-secondary px-4 ms-2 fw-bold">
+            <i class="bi bi-arrow-left"></i> Cancelar
+        </a>
     </form>
+
 </div>

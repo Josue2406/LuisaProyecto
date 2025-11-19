@@ -1,0 +1,81 @@
+@model IEnumerable<ProyectoLuisa.Models.Noticia>
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Gestión de Noticias";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary fw-bold text-center mb-4">📰 Gestión de Noticias</h2>
+
+    <div class="text-end mb-3">
+        <a asp-action="Crear" class="btn btn-success fw-bold">
+            <i class="bi bi-plus-circle"></i> Nueva Noticia
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            No hay noticias registradas.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped text-center">
+            <thead class="table-primary">
+                <tr>
+                    <th>Título</th>
+                    <th>Imagen</th>
+                    <th>Fecha</th>
+                    <th>Publicado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var n in Model)
+                {
+                    <tr>
+                        <td>@n.Titulo</td>
+
+                        <td>
+                            @if (!string.IsNullOrEmpty(n.ImagenUrl))
+                            {
+                                <img src="@n.ImagenUrl" style="width:80px; height:60px; object-fit:cover;" class="rounded shadow-sm" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">Sin imagen</span>
+                            }
+                        </td>
+
+                        <td>@n.Fecha.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (n.Publicada)
+                            {
+                                <span class="badge bg-success">Sí</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">No</span>
+                            }
+                        </td>
+
+                        <td>
+                            <a asp-action="Editar" asp-route-id="@n.Id" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <form asp-action="Eliminar" asp-route-id="@n.Id" method="post" class="d-inline">
+                                <button class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Desea eliminar esta noticia?')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

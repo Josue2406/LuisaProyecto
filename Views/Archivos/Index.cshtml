@@ -1,5 +1,6 @@
 @model IEnumerable<ProyectoLuisa.Models.Archivo>
 @{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Gestión de Archivos";
     bool esDocenteOAdmin = ViewBag.EsDocenteOAdmin ?? false;
 }

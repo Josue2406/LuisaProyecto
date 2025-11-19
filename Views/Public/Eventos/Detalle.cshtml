@@ -1,0 +1,36 @@
+@model ProyectoLuisa.Models.Evento
+
+@{
+    Layout = "~/Views/Public/Shared/_LayoutPublic.cshtml";
+    ViewData["Title"] = "Detalle del Evento";
+}
+
+<div class="container mt-4">
+
+    <a href="/Public/Eventos" class="btn btn-outline-primary mb-3">
+        ← Volver a Eventos
+    </a>
+
+    <div class="card shadow-sm mb-5">
+
+        @if (!string.IsNullOrEmpty(Model.ImagenUrl))
+        {
+            <img src="@Model.ImagenUrl" class="card-img-top" 
+                 style="max-height: 350px; object-fit: cover;" />
+        }
+
+        <div class="card-body p-4">
+            <h1 class="fw-bold text-primary">@Model.Titulo</h1>
+
+            <p class="text-muted mb-3">
+                <i class="bi bi-calendar-event"></i>
+                @Model.Fecha.ToString("dd/MM/yyyy")
+            </p>
+
+            <p class="fs-5">
+                @Model.Descripcion
+            </p>
+        </div>
+    </div>
+
+</div>

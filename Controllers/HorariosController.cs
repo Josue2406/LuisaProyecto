@@ -22,72 +22,7 @@ namespace ProyectoLuisa.Controllers
             return rol == "Admin" || rol == "Administrador" || rol == "Docente" || rol == "Profesor";
         }
 
-        // ✅ Validar conflictos de horarios (aula y profesor)
-        private bool TieneConflicto(Horario h, int? ignoreId, out string mensaje)
-        {
-            var dia = (h.DiaSemana ?? "").Trim();
-            var aula = (h.Aula ?? "").Trim();
-            var prof = (h.Profesor ?? "").Trim();
-
-            if (h.HoraInicio >= h.HoraFin)
-            {
-                mensaje = "❌ La hora de inicio no puede ser igual o posterior a la hora de finalización.";
-                return true;
-            }
-
-            // 🔸 Aula ocupada
-            bool conflictoAula = _context.Horarios.Any(x =>
-                (ignoreId == null || x.Id != ignoreId) &&
-                x.DiaSemana == dia &&
-                x.Aula == aula &&
-                (
-                    (h.HoraInicio >= x.HoraInicio && h.HoraInicio < x.HoraFin) ||
-                    (h.HoraFin > x.HoraInicio && h.HoraFin <= x.HoraFin) ||
-                    (h.HoraInicio <= x.HoraInicio && h.HoraFin >= x.HoraFin)
-                )
-            );
-
-            if (conflictoAula)
-            {
-                mensaje = $"❌ El aula {aula} ya está ocupada ese día y hora.";
-                return true;
-            }
-
-            // 🔸 Profesor ocupado
-            bool conflictoProfesor = _context.Horarios.Any(x =>
-                (ignoreId == null || x.Id != ignoreId) &&
-                x.DiaSemana == dia &&
-                x.Profesor == prof &&
-                (
-                    (h.HoraInicio >= x.HoraInicio && h.HoraInicio < x.HoraFin) ||
-                    (h.HoraFin > x.HoraInicio && h.HoraFin <= x.HoraFin) ||
-                    (h.HoraInicio <= x.HoraInicio && h.HoraFin >= x.HoraFin)
-                )
-            );
-
-            if (conflictoProfesor)
-            {
-                mensaje = $"❌ El profesor {prof} ya tiene una clase asignada en ese horario.";
-                return true;
-            }
-
-            mensaje = string.Empty;
-            return false;
-        }
-
-        // ✅ Validar rango horario (7:00–16:30 o 17:00–22:00)
-        private bool HorarioValido(TimeSpan inicio, TimeSpan fin)
-        {
-            var rango1Inicio = new TimeSpan(7, 0, 0);
-            var rango1Fin = new TimeSpan(16, 30, 0);
-            var rango2Inicio = new TimeSpan(17, 0, 0);
-            var rango2Fin = new TimeSpan(22, 0, 0);
-
-            return (inicio >= rango1Inicio && fin <= rango1Fin) ||
-                   (inicio >= rango2Inicio && fin <= rango2Fin);
-        }
-
-        // 🔢 Ordenar días de la semana en orden natural
+        // 🔢 Orden natural de días
         private int ObtenerOrdenDia(string dia)
         {
             return dia?.ToLower() switch
@@ -97,101 +32,134 @@ namespace ProyectoLuisa.Controllers
                 "miércoles" or "miercoles" => 3,
                 "jueves" => 4,
                 "viernes" => 5,
-                "sábado" or "sabado" => 6,
-                _ => 7
+                _ => 99 // cualquier otro día queda al final
             };
         }
 
-        // 📋 INDEX (solo docentes/admin)
-        public IActionResult Index(string? dia, string? grupo, string? profesor)
+        // ⚠ Validar rango (mañana/tarde)
+        private bool HorarioValido(TimeSpan inicio, TimeSpan fin)
+        {
+            var rango1Inicio = new TimeSpan(7, 0, 0);
+            var rango1Fin = new TimeSpan(16, 30, 0);
+            var rango2Inicio = new TimeSpan(17, 0, 0);
+            var rango2Fin = new TimeSpan(22, 0, 0);
+
+            return (inicio >= rango1Inicio && fin <= rango1Fin)
+                || (inicio >= rango2Inicio && fin <= rango2Fin);
+        }
+
+        // ⚠ Validación de conflictos
+        private bool TieneConflicto(Horario h, int? ignoreId, out string mensaje)
+        {
+            var dia = (h.DiaSemana ?? "").Trim();
+
+            if (h.HoraInicio >= h.HoraFin)
+            {
+                mensaje = "❌ La hora de inicio no puede ser igual o posterior a la hora final.";
+                return true;
+            }
+
+            // 🔹 AULA OCUPADA
+            bool conflictoAula = _context.Horarios.Any(x =>
+                (ignoreId == null || x.Id != ignoreId) &&
+                x.DiaSemana.Trim() == dia &&
+                x.Aula.Trim() == h.Aula.Trim() &&
+                (
+                    (h.HoraInicio >= x.HoraInicio && h.HoraInicio < x.HoraFin) ||
+                    (h.HoraFin > x.HoraInicio && h.HoraFin <= x.HoraFin) ||
+                    (h.HoraInicio <= x.HoraInicio && h.HoraFin >= x.HoraFin)
+                )
+            );
+
+            if (conflictoAula)
+            {
+                mensaje = $"❌ El aula {h.Aula} ya está ocupada en ese horario.";
+                return true;
+            }
+
+            // 🔹 PROFESOR OCUPADO
+            bool conflictoProfe = _context.Horarios.Any(x =>
+                (ignoreId == null || x.Id != ignoreId) &&
+                x.DiaSemana.Trim() == dia &&
+                x.DocenteId == h.DocenteId &&
+                (
+                    (h.HoraInicio >= x.HoraInicio && h.HoraInicio < x.HoraFin) ||
+                    (h.HoraFin > x.HoraInicio && h.HoraFin <= x.HoraFin) ||
+                    (h.HoraInicio <= x.HoraInicio && h.HoraFin >= x.HoraFin)
+                )
+            );
+
+            if (conflictoProfe)
+            {
+                var profe = _context.Usuarios
+                    .Where(u => u.Id == h.DocenteId)
+                    .Select(u => u.Nombre)
+                    .FirstOrDefault() ?? "El docente";
+
+                mensaje = $"❌ {profe} ya tiene una clase en ese horario.";
+                return true;
+            }
+
+            mensaje = "";
+            return false;
+        }
+
+        // 📋 INDEX
+        public IActionResult Index(string? dia, string? seccion, int? docenteId)
         {
             if (!EsDocenteOAdmin())
-                return RedirectToAction("Publico");
+                return RedirectToAction("Index", "PublicHorarios");
 
             var horarios = _context.Horarios.AsQueryable();
 
             if (!string.IsNullOrEmpty(dia))
                 horarios = horarios.Where(h => h.DiaSemana.Contains(dia));
 
-            if (!string.IsNullOrEmpty(grupo))
-                horarios = horarios.Where(h => h.Grupo.Contains(grupo));
+            if (!string.IsNullOrEmpty(seccion))
+                horarios = horarios.Where(h => h.Seccion.Contains(seccion));
 
-            if (!string.IsNullOrEmpty(profesor))
-                horarios = horarios.Where(h => h.Profesor.Contains(profesor));
+            if (docenteId.HasValue)
+                horarios = horarios.Where(h => h.DocenteId == docenteId.Value);
 
-            // Ordenar por día natural y hora de inicio
             var listaOrdenada = horarios
                 .AsEnumerable()
                 .OrderBy(h => ObtenerOrdenDia(h.DiaSemana))
                 .ThenBy(h => h.HoraInicio)
                 .ToList();
 
+            var docentesDict = _context.Usuarios
+                .Where(u => listaOrdenada.Select(h => h.DocenteId).Distinct().Contains(u.Id))
+                .ToDictionary(
+                    u => u.Id,
+                    u => $"{u.Nombre} ({u.Rol})"
+                );
+
+            ViewBag.Docentes = docentesDict;
             ViewBag.EsDocenteOAdmin = EsDocenteOAdmin();
+
             return View(listaOrdenada);
         }
 
-        // 🌐 Vista pública agrupada por sección
-        [HttpGet]
-        public IActionResult Publico(string? seccionSeleccionada, bool verTodos = false)
-        {
-            if (EsDocenteOAdmin())
-                return RedirectToAction("Index");
-
-            var secciones = _context.Horarios
-                .Where(h => !string.IsNullOrEmpty(h.Seccion))
-                .Select(h => h.Seccion.Trim())
-                .Distinct()
-                .OrderBy(s => s)
-                .ToList();
-
-            ViewBag.Secciones = secciones;
-            ViewBag.SeccionSeleccionada = seccionSeleccionada;
-            ViewBag.VerTodos = verTodos;
-
-            var horarios = _context.Horarios.AsQueryable();
-
-            if (!string.IsNullOrEmpty(seccionSeleccionada))
-                horarios = horarios.Where(h => h.Seccion == seccionSeleccionada);
-
-            // Agrupar los horarios por sección y ordenar internamente
-            var horariosAgrupados = horarios
-                .AsEnumerable()
-                .GroupBy(h => h.Seccion)
-                .ToDictionary(
-                    g => g.Key,
-                    g => g.OrderBy(h => ObtenerOrdenDia(h.DiaSemana))
-                          .ThenBy(h => h.HoraInicio)
-                          .ToList()
-                );
-
-            // Si seleccionó “Ver todos”, traer todas las secciones
-            if (verTodos)
-            {
-                horariosAgrupados = _context.Horarios
-                    .AsEnumerable()
-                    .Where(h => !string.IsNullOrEmpty(h.Seccion))
-                    .GroupBy(h => h.Seccion)
-                    .ToDictionary(
-                        g => g.Key,
-                        g => g.OrderBy(h => ObtenerOrdenDia(h.DiaSemana))
-                              .ThenBy(h => h.HoraInicio)
-                              .ToList()
-                    );
-            }
-
-            return View(horariosAgrupados);
-        }
-
-        // 🟢 Crear (GET)
+        // 🟢 Crear GET
         public IActionResult Crear()
         {
             if (!EsDocenteOAdmin())
                 return View("~/Views/Shared/AccesoDenegado.cshtml");
 
+            ViewBag.Secciones = new List<string>
+            {
+                "1° - Mañana","1° - Tarde",
+                "2° - Mañana","2° - Tarde",
+                "3° - Mañana","3° - Tarde",
+                "4° - Mañana","4° - Tarde",
+                "5° - Mañana","5° - Tarde",
+                "6° - Mañana","6° - Tarde"
+            };
+
             return View();
         }
 
-        // 🟢 Crear (POST)
+        // 🟢 Crear POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Crear(Horario model)
@@ -199,12 +167,18 @@ namespace ProyectoLuisa.Controllers
             if (!EsDocenteOAdmin())
                 return View("~/Views/Shared/AccesoDenegado.cshtml");
 
-            if (!ModelState.IsValid)
+            // ⛔ Escuela solo lunes a viernes
+            if (model.DiaSemana == "Sábado" || model.DiaSemana == "Sabado")
+            {
+                TempData["Error"] = "⚠️ La escuela solo trabaja de lunes a viernes.";
                 return View(model);
+            }
+
+            model.DocenteId = HttpContext.Session.GetInt32("UsuarioId") ?? 0;
 
             if (!HorarioValido(model.HoraInicio, model.HoraFin))
             {
-                TempData["Error"] = "⚠️ Los horarios deben estar entre 7:00 a.m.–4:30 p.m. o 5:00 p.m.–10:00 p.m.";
+                TempData["Error"] = "⚠️ El horario debe ser entre 7am–4:30pm o 5pm–10pm.";
                 return View(model);
             }
 
@@ -216,11 +190,12 @@ namespace ProyectoLuisa.Controllers
 
             _context.Horarios.Add(model);
             _context.SaveChanges();
+
             TempData["Success"] = "✅ Horario registrado correctamente.";
             return RedirectToAction("Index");
         }
 
-        // ✏️ Editar (GET)
+        // ✏ Editar GET
         public IActionResult Editar(int id)
         {
             if (!EsDocenteOAdmin())
@@ -230,10 +205,20 @@ namespace ProyectoLuisa.Controllers
             if (horario == null)
                 return NotFound();
 
+            ViewBag.Secciones = new List<string>
+            {
+                "1° - Mañana","1° - Tarde",
+                "2° - Mañana","2° - Tarde",
+                "3° - Mañana","3° - Tarde",
+                "4° - Mañana","4° - Tarde",
+                "5° - Mañana","5° - Tarde",
+                "6° - Mañana","6° - Tarde"
+            };
+
             return View(horario);
         }
 
-        // ✏️ Editar (POST)
+        // ✏ Editar POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Editar(Horario model)
@@ -241,12 +226,18 @@ namespace ProyectoLuisa.Controllers
             if (!EsDocenteOAdmin())
                 return View("~/Views/Shared/AccesoDenegado.cshtml");
 
-            if (!ModelState.IsValid)
+            // ⛔ Escuela solo lunes a viernes
+            if (model.DiaSemana == "Sábado" || model.DiaSemana == "Sabado")
+            {
+                TempData["Error"] = "⚠️ La escuela solo trabaja de lunes a viernes.";
                 return View(model);
+            }
+
+            model.DocenteId = HttpContext.Session.GetInt32("UsuarioId") ?? 0;
 
             if (!HorarioValido(model.HoraInicio, model.HoraFin))
             {
-                TempData["Error"] = "⚠️ Los horarios deben estar entre 7:00 a.m.–4:30 p.m. o 5:00 p.m.–10:00 p.m.";
+                TempData["Error"] = "⚠️ El horario debe ser entre 7am–4:30pm o 5pm–10pm.";
                 return View(model);
             }
 
@@ -259,11 +250,11 @@ namespace ProyectoLuisa.Controllers
             _context.Update(model);
             _context.SaveChanges();
 
-            TempData["Success"] = "✅ Horario actualizado correctamente.";
+            TempData["Success"] = "✅ Horario actualizado.";
             return RedirectToAction("Index");
         }
 
-        // 🗑️ Eliminar
+        // 🗑 Eliminar
         [HttpPost]
         public IActionResult Eliminar(int id)
         {
@@ -277,34 +268,8 @@ namespace ProyectoLuisa.Controllers
             _context.Horarios.Remove(horario);
             _context.SaveChanges();
 
-            TempData["Success"] = "🗑️ Horario eliminado correctamente.";
+            TempData["Success"] = "🗑 Horario eliminado.";
             return RedirectToAction("Index");
         }
-
-    // 📆 Vista Semanal (solo Admin/Docente)
-public IActionResult Semanal(string? seccionSeleccionada)
-{
-    if (!EsDocenteOAdmin())
-        return View("~/Views/Shared/AccesoDenegado.cshtml");
-
-    var secciones = _context.Horarios
-        .Where(h => !string.IsNullOrEmpty(h.Seccion))
-        .Select(h => h.Seccion.Trim())
-        .Distinct()
-        .OrderBy(s => s)
-        .ToList();
-
-    ViewBag.Secciones = secciones;
-    ViewBag.SeccionSeleccionada = seccionSeleccionada;
-
-    var horarios = _context.Horarios.AsEnumerable()
-        .Where(h => string.IsNullOrEmpty(seccionSeleccionada) || h.Seccion == seccionSeleccionada)
-        .OrderBy(h => ObtenerOrdenDia(h.DiaSemana))
-        .ThenBy(h => h.HoraInicio)
-        .ToList();
-
-    return View(horarios);
-}
- 
     }
 }

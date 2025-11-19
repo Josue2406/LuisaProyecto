@@ -13,11 +13,14 @@
 
         <div class="card-body p-4">
             <dl class="row mb-0">
+
                 <dt class="col-sm-4">Materia:</dt>
                 <dd class="col-sm-8">@Model.Materia</dd>
 
-                <dt class="col-sm-4">Profesor:</dt>
-                <dd class="col-sm-8">@Model.Profesor</dd>
+                <dt class="col-sm-4">Docente asignado:</dt>
+                <dd class="col-sm-8">
+                    @ViewBag.Docentes?[Model.DocenteId] ?? "Docente no registrado"
+                </dd>
 
                 <dt class="col-sm-4">Día de la Semana:</dt>
                 <dd class="col-sm-8">@Model.DiaSemana</dd>
@@ -31,14 +34,9 @@
                 <dt class="col-sm-4">Aula:</dt>
                 <dd class="col-sm-8">@Model.Aula</dd>
 
-                <dt class="col-sm-4">Grupo:</dt>
-                <dd class="col-sm-8">@Model.Grupo</dd>
+                <dt class="col-sm-4">Sección:</dt>
+                <dd class="col-sm-8">@Model.Seccion</dd>
 
-                @if (!string.IsNullOrEmpty(Model.Seccion))
-                {
-                    <dt class="col-sm-4">Sección:</dt>
-                    <dd class="col-sm-8">@Model.Seccion</dd>
-                }
             </dl>
         </div>
 
@@ -47,7 +45,7 @@
                 <i class="bi bi-arrow-left"></i> Volver
             </a>
 
-            @if (rol == "Docente" || rol == "Admin")
+            @if (rol == "Docente" || rol == "Admin" || rol == "Administrador")
             {
                 <a asp-action="Editar" asp-route-id="@Model.Id" class="btn btn-primary px-4 ms-2">
                     <i class="bi bi-pencil"></i> Editar

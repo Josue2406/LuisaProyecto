@@ -1,11 +1,16 @@
+@{
+    Layout = "~/Views/Public/Shared/_LayoutPublic.cshtml";
+}
 @model Dictionary<string, List<ProyectoLuisa.Models.Horario>>
+
 @{
     ViewData["Title"] = "Consulta Pública de Horarios";
     var secciones = ViewBag.Secciones as List<string>;
     var seleccion = ViewBag.SeccionSeleccionada as string;
     var verTodos = ViewBag.VerTodos as bool? ?? false;
 
-    // Paleta de colores (Bootstrap)
+    var docentes = ViewBag.Docentes as Dictionary<int, string>;
+
     var colores = new[] { "primary", "success", "warning", "danger", "info", "secondary", "dark" };
     int colorIndex = 0;
 }
@@ -67,8 +72,10 @@
                                 <i class="bi bi-book me-2"></i> Sección @grupo.Key
                             </button>
                         </h2>
+
                         <div id="@collapseId" class="accordion-collapse collapse" data-bs-parent="#accordionSecciones">
                             <div class="accordion-body bg-light">
+
                                 <table class="table table-striped table-bordered text-center align-middle mb-0">
                                     <thead class="table-@color text-white">
                                         <tr>
@@ -77,25 +84,29 @@
                                             <th>Hora Inicio</th>
                                             <th>Hora Fin</th>
                                             <th>Aula</th>
-                                            <th>Grupo</th>
                                             <th>Profesor</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         @foreach (var h in grupo.Value)
                                         {
+                                            string nombreProfe = docentes != null && docentes.ContainsKey(h.DocenteId)
+                                                ? docentes[h.DocenteId]
+                                                : "No asignado";
+
                                             <tr>
                                                 <td>@h.Materia</td>
                                                 <td>@h.DiaSemana</td>
                                                 <td>@h.HoraInicio.ToString(@"hh\:mm")</td>
                                                 <td>@h.HoraFin.ToString(@"hh\:mm")</td>
                                                 <td>@h.Aula</td>
-                                                <td>@h.Grupo</td>
-                                                <td>@h.Profesor</td>
+                                                <td>@nombreProfe</td>
                                             </tr>
                                         }
                                     </tbody>
                                 </table>
+
                             </div>
                         </div>
                     </div>
@@ -113,6 +124,7 @@
                     <div class="card-header bg-@color text-white fw-bold">
                         <i class="bi bi-book"></i> Sección @grupo.Key
                     </div>
+
                     <div class="card-body bg-light">
                         <table class="table table-bordered table-hover text-center align-middle mb-0">
                             <thead class="table-@color text-white">
@@ -122,25 +134,29 @@
                                     <th>Hora Inicio</th>
                                     <th>Hora Fin</th>
                                     <th>Aula</th>
-                                    <th>Grupo</th>
                                     <th>Profesor</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 @foreach (var h in grupo.Value)
                                 {
+                                    string nombreProfe = docentes != null && docentes.ContainsKey(h.DocenteId)
+                                        ? docentes[h.DocenteId]
+                                        : "No asignado";
+
                                     <tr>
                                         <td>@h.Materia</td>
                                         <td>@h.DiaSemana</td>
                                         <td>@h.HoraInicio.ToString(@"hh\:mm")</td>
                                         <td>@h.HoraFin.ToString(@"hh\:mm")</td>
                                         <td>@h.Aula</td>
-                                        <td>@h.Grupo</td>
-                                        <td>@h.Profesor</td>
+                                        <td>@nombreProfe</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             }

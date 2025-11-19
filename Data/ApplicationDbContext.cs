@@ -17,6 +17,8 @@ public DbSet<Evento> Eventos { get; set; }
 public DbSet<Horario> Horarios { get; set; }
 public DbSet<Archivo> Archivos { get; set; }
 
+public DbSet<Noticia> Noticias { get; set; }
+
 
 public DbSet<InformacionInstitucional> InformacionInstitucional { get; set; }
 

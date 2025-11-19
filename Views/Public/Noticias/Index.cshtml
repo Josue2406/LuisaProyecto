@@ -1,0 +1,25 @@
+@model IEnumerable<ProyectoLuisa.Models.Noticia>
+
+<div class="container mt-4">
+    <h2 class="text-primary fw-bold mb-4">📰 Noticias</h2>
+
+    @foreach (var n in Model)
+    {
+        <div class="card mb-4 shadow-sm">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    @if (!string.IsNullOrEmpty(n.ImagenUrl))
+                    {
+                        <img class="img-fluid w-100 h-100 object-fit-cover" src="@n.ImagenUrl" />
+                    }
+                </div>
+                <div class="col-md-8 p-3">
+                    <h4>@n.Titulo</h4>
+                    <p class="text-muted">@n.Fecha.ToString("dd/MM/yyyy")</p>
+                    <p>@n.DescripcionCorta</p>
+                    <a asp-action="Detalle" asp-route-id="@n.Id" class="btn btn-primary">Leer más</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
