@@ -51,10 +51,11 @@
 
     <!-- EVENTOS -->
     <li class="nav-item">
-        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PublicEventos" ? "active" : "")"
-           asp-controller="PublicEventos" asp-action="Index">
-            <i class="bi bi-calendar-event"></i> Eventos
-        </a>
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Eventos" ? "active" : "")"
+   asp-controller="Public" asp-action="Eventos">
+    <i class="bi bi-calendar-event"></i> Eventos
+</a>
+
     </li>
 
     <!-- HORARIOS -->
