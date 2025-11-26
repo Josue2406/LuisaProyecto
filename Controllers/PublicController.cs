@@ -13,10 +13,19 @@ namespace ProyectoLuisa.Controllers
             _context = context;
         }
 
-        public IActionResult Noticias()
-    {
-        return View();
-    }
+    /*  public IActionResult Noticias()
+{
+    return RedirectToAction("Index", "PublicNoticias");
+} */
+public IActionResult Noticias()
+{
+    var noticias = _context.Noticias
+        .Where(n => n.Publicada)
+        .OrderByDescending(n => n.Fecha)
+        .ToList();
+
+    return View("~/Views/Public/Noticias/Index.cshtml", noticias);
+}
 
         // 📌 PÁGINA PRINCIPAL: /Public
         public IActionResult Index()
@@ -24,7 +33,7 @@ namespace ProyectoLuisa.Controllers
             var eventos = _context.Eventos
                 .Where(e => e.Publicado)
                 .OrderByDescending(e => e.Fecha)
-                .Take(3)
+                .Take(3) 
                 .ToList();
 
             return View("~/Views/Public/Inicio/Index.cshtml", eventos);

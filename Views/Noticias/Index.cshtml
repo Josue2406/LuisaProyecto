@@ -1,81 +1,83 @@
 @model IEnumerable<ProyectoLuisa.Models.Noticia>
 
 @{
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Gestión de Noticias";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="container mt-4">
-    <h2 class="text-primary fw-bold text-center mb-4">📰 Gestión de Noticias</h2>
+<h2 class="text-primary fw-bold mb-4">📰 Gestión de Noticias</h2>
 
-    <div class="text-end mb-3">
-        <a asp-action="Crear" class="btn btn-success fw-bold">
-            <i class="bi bi-plus-circle"></i> Nueva Noticia
-        </a>
-    </div>
-
-    @if (!Model.Any())
-    {
-        <div class="alert alert-info text-center">
-            No hay noticias registradas.
-        </div>
-    }
-    else
-    {
-        <table class="table table-bordered table-striped text-center">
-            <thead class="table-primary">
-                <tr>
-                    <th>Título</th>
-                    <th>Imagen</th>
-                    <th>Fecha</th>
-                    <th>Publicado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var n in Model)
-                {
-                    <tr>
-                        <td>@n.Titulo</td>
-
-                        <td>
-                            @if (!string.IsNullOrEmpty(n.ImagenUrl))
-                            {
-                                <img src="@n.ImagenUrl" style="width:80px; height:60px; object-fit:cover;" class="rounded shadow-sm" />
-                            }
-                            else
-                            {
-                                <span class="text-muted">Sin imagen</span>
-                            }
-                        </td>
-
-                        <td>@n.Fecha.ToString("dd/MM/yyyy")</td>
-                        <td>
-                            @if (n.Publicada)
-                            {
-                                <span class="badge bg-success">Sí</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">No</span>
-                            }
-                        </td>
-
-                        <td>
-                            <a asp-action="Editar" asp-route-id="@n.Id" class="btn btn-warning btn-sm">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-
-                            <form asp-action="Eliminar" asp-route-id="@n.Id" method="post" class="d-inline">
-                                <button class="btn btn-danger btn-sm"
-                                    onclick="return confirm('¿Desea eliminar esta noticia?')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
+<div class="mb-3 text-end">
+    <a asp-action="Crear" class="btn btn-success fw-bold">
+        <i class="bi bi-plus-circle"></i> Nueva Noticia
+    </a>
 </div>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning text-center fw-bold">
+        No hay noticias registradas.
+    </div>
+    return;
+}
+
+<table class="table table-striped table-bordered align-middle text-center shadow">
+    <thead class="table-primary">
+        <tr>
+            <th style="width: 120px;">Imagen</th>
+            <th>Título</th>
+            <th style="width: 120px;">Fecha</th>
+            <th style="width: 120px;">Publicada</th>
+            <th style="width: 140px;">Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var n in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(n.ImagenUrl))
+                    {
+                        <img src="@n.ImagenUrl" class="img-thumbnail"
+                             style="max-width: 80px; max-height: 80px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin imagen</span>
+                    }
+                </td>
+
+                <td class="fw-semibold">@n.Titulo</td>
+
+                <td>@n.Fecha.ToString("dd/MM/yyyy")</td>
+
+                <td>
+                    @if (n.Publicada)
+                    {
+                        <span class="badge bg-success">Sí</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">No</span>
+                    }
+                </td>
+
+                <td>
+                    <a asp-action="Editar" asp-route-id="@n.Id"
+                       class="btn btn-warning btn-sm me-1" title="Editar">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+
+                    <form asp-action="Eliminar" asp-route-id="@n.Id"
+                          method="post" class="d-inline">
+                        <button class="btn btn-danger btn-sm"
+                                onclick="return confirm('¿Eliminar noticia?')" title="Eliminar">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

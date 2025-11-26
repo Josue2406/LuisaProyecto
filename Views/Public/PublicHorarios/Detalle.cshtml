@@ -1,0 +1,31 @@
+@model ProyectoLuisa.Models.HorarioImagen
+
+<div class="container mt-5">
+
+    <a href="@Url.Action("Index", "PublicHorarios")"
+       class="btn btn-outline-secondary mb-4">
+        <i class="bi bi-arrow-left"></i> Volver
+    </a>
+
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                Horario: Grado @Model.Grado - Sección @Model.Seccion
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <p class="mb-1"><strong>Docente:</strong> @Model.Docente</p>
+            <p class="mb-1"><strong>Subido por:</strong> Administrador del Sistema</p>
+            <p class="mb-3"><strong>Fecha:</strong> @Model.FechaSubida.ToString("dd/MM/yyyy")</p>
+
+            <hr />
+
+            <img src="@Model.ImagenUrl"
+                 alt="Imagen del horario académico"
+                 class="img-fluid rounded shadow-sm" />
+
+        </div>
+    </div>
+</div>

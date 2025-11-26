@@ -19,6 +19,12 @@ public DbSet<Archivo> Archivos { get; set; }
 
 public DbSet<Noticia> Noticias { get; set; }
 
+public DbSet<HorarioCard> HorariosCards { get; set; }
+
+public DbSet<HorarioImagen> HorarioImagenes { get; set; }
+
+
+
 
 public DbSet<InformacionInstitucional> InformacionInstitucional { get; set; }
 

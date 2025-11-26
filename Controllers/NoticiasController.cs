@@ -19,7 +19,10 @@ namespace ProyectoLuisa.Controllers
         // LISTADO ADMIN
         public IActionResult Index()
         {
-            var noticias = _context.Noticias.OrderByDescending(n => n.Fecha).ToList();
+            var noticias = _context.Noticias
+                .OrderByDescending(n => n.Fecha)
+                .ToList();
+
             return View(noticias);
         }
 
@@ -37,7 +40,7 @@ namespace ProyectoLuisa.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            // Subir imagen
+            // SUBIR IMAGEN
             if (imagen != null)
             {
                 string carpeta = Path.Combine(_env.WebRootPath, "uploads/noticias");
@@ -57,7 +60,7 @@ namespace ProyectoLuisa.Controllers
             _context.Noticias.Add(model);
             _context.SaveChanges();
 
-            TempData["Success"] = "Noticia creada correctamente";
+            TempData["Success"] = "Noticia creada correctamente.";
             return RedirectToAction("Index");
         }
 
@@ -75,10 +78,12 @@ namespace ProyectoLuisa.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Editar(Noticia model, IFormFile? imagen)
         {
-            var original = _context.Noticias.AsNoTracking().FirstOrDefault(n => n.Id == model.Id);
+            var original = _context.Noticias.AsNoTracking()
+                                .FirstOrDefault(n => n.Id == model.Id);
+
             if (original == null) return NotFound();
 
-            // Subir nueva imagen si se envía
+            // SUBIR NUEVA IMAGEN
             if (imagen != null)
             {
                 string carpeta = Path.Combine(_env.WebRootPath, "uploads/noticias");
@@ -99,10 +104,10 @@ namespace ProyectoLuisa.Controllers
                 model.ImagenUrl = original.ImagenUrl;
             }
 
-            _context.Update(model);
+            _context.Noticias.Update(model);
             _context.SaveChanges();
 
-            TempData["Success"] = "Noticia actualizada";
+            TempData["Success"] = "Noticia actualizada correctamente.";
             return RedirectToAction("Index");
         }
 
@@ -116,7 +121,7 @@ namespace ProyectoLuisa.Controllers
             _context.Noticias.Remove(noticia);
             _context.SaveChanges();
 
-            TempData["Success"] = "Noticia eliminada";
+            TempData["Success"] = "Noticia eliminada.";
             return RedirectToAction("Index");
         }
     }

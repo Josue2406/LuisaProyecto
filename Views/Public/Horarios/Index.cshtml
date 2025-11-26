@@ -1,88 +1,30 @@
-@model Dictionary<string, List<ProyectoLuisa.Models.Horario>>
-
+@model IEnumerable<ProyectoLuisa.Models.HorarioCard>
 @{
     Layout = "~/Views/Public/Shared/_LayoutPublic.cshtml";
-    ViewData["Title"] = "Horarios Públicos";
-
-    var docentes = ViewBag.Docentes as Dictionary<int, string>;
-    var secciones = ViewBag.Secciones as List<string>;
-    var seccionSeleccionada = ViewBag.SeccionSeleccionada as string;
+    ViewData["Title"] = "Horarios Escolares";
 }
 
-<div class="container mt-4 mb-5">
+<h2 class="text-center fw-bold text-primary mb-4">🕓 Horarios</h2>
 
-    <h2 class="text-center fw-bold text-primary mb-4">
-        <i class="bi bi-calendar-week"></i> Horarios Públicos
-    </h2>
+<div class="row row-cols-1 row-cols-md-4 g-4">
 
-    <!-- 🔽 FILTRO POR SECCIÓN -->
-    <form method="get" class="text-center mb-4">
-        <label class="fw-bold me-2">Filtrar por Sección:</label>
+@foreach (var h in Model)
+{
+    <div class="col">
+        <div class="card shadow-sm h-100">
 
-        <select name="seccionSeleccionada" class="form-select d-inline-block w-auto">
-            <option value="">Todas</option>
+            <a asp-action="Detalle" asp-route-id="@h.Id">
+                <img src="@h.ImagenUrl" class="card-img-top" style="height:150px; object-fit:cover;" />
+            </a>
 
-            @foreach (var s in secciones)
-            {
-                <option value="@s" selected="@(s == seccionSeleccionada)">
-                    @s
-                </option>
-            }
-        </select>
-
-        <button type="submit" class="btn btn-primary ms-2">
-            <i class="bi bi-search"></i> Buscar
-        </button>
-    </form>
-
-    <hr />
-
-    @if (Model == null || !Model.Any())
-    {
-        <div class="alert alert-info text-center">
-            No hay horarios registrados.
-        </div>
-    }
-    else
-    {
-        foreach (var grupo in Model)
-        {
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white fw-bold">
-                    Sección: @grupo.Key
-                </div>
-
-                <div class="card-body p-0">
-                    <table class="table table-striped table-hover m-0">
-                        <thead class="table-light">
-                            <tr class="text-center">
-                                <th>Día</th>
-                                <th>Inicio</th>
-                                <th>Fin</th>
-                                <th>Materia</th>
-                                <th>Docente</th>
-                                <th>Aula</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach (var h in grupo.Value)
-                            {
-                                <tr class="text-center">
-                                    <td>@h.DiaSemana</td>
-                                    <td>@h.HoraInicio.ToString(@"hh\:mm")</td>
-                                    <td>@h.HoraFin.ToString(@"hh\:mm")</td>
-                                    <td>@h.Materia</td>
-
-                                    <td>@(docentes.ContainsKey(h.DocenteId) ? docentes[h.DocenteId] : "No asignado")</td>
-
-                                    <td>@h.Aula</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+            <div class="card-body">
+                <h5 class="fw-bold">@h.Grado @h.Grupo – @h.Seccion</h5>
+                <p class="text-muted">Subido por @h.SubidoPorNombre</p>
+                <a asp-action="Detalle" asp-route-id="@h.Id" class="btn btn-primary btn-sm">Abrir</a>
             </div>
-        }
-    }
+
+        </div>
+    </div>
+}
+
 </div>

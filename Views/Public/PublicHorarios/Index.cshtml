@@ -1,0 +1,29 @@
+@model IEnumerable<ProyectoLuisa.Models.HorarioImagen>
+
+<div class="container mt-5">
+    <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-book fs-1 text-primary me-3"></i>
+        <h2 class="text-primary fw-bold">Horarios Académicos</h2>
+    </div>
+
+    <div class="row">
+        @foreach (var h in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+
+                        <h4 class="fw-bold mb-3">
+                            Grado @h.Grado - Sección @h.Seccion
+                        </h4>
+
+                        <a href="@Url.Action("Detalle", "PublicHorarios", new { id = h.Id })"
+                           class="btn btn-primary px-4">
+                            Ver más
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

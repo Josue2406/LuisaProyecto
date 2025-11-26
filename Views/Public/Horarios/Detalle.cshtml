@@ -1,0 +1,17 @@
+@model ProyectoLuisa.Models.HorarioCard
+@{
+    Layout = "~/Views/Public/Shared/_LayoutPublic.cshtml";
+    ViewData["Title"] = "Horario";
+}
+
+<h2 class="fw-bold text-primary">@Model.Grado @Model.Grupo – @Model.Seccion</h2>
+
+<p class="text-muted">
+    Subido por: <strong>@Model.SubidoPorNombre</strong>
+</p>
+
+<img src="@Model.ImagenUrl" class="img-fluid rounded shadow mb-3" />
+
+<a asp-action="Index" class="btn btn-secondary">
+    <i class="bi bi-arrow-left"></i> Volver
+</a>

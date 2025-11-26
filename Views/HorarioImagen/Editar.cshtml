@@ -1,0 +1,54 @@
+@model ProyectoLuisa.Models.HorarioImagen
+
+@{
+    ViewData["Title"] = "Editar Horario";
+}
+
+<h2>Editar Horario</h2>
+
+<form asp-action="Editar" asp-controller="HorarioImagen" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="Grado" class="form-label"></label>
+        <input asp-for="Grado" class="form-control" />
+        <span asp-validation-for="Grado" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Seccion" class="form-label"></label>
+        <input asp-for="Seccion" class="form-control" />
+        <span asp-validation-for="Seccion" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Docente" class="form-label"></label>
+        <input asp-for="Docente" class="form-control" />
+        <span asp-validation-for="Docente" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Imagen actual:</label><br />
+        @if (!string.IsNullOrEmpty(Model.ImagenUrl))
+        {
+            <img src="@Model.ImagenUrl" alt="Horario" class="img-thumbnail mb-2" style="max-width: 200px;" />
+        }
+        else
+        {
+            <p>No hay imagen cargada</p>
+        }
+    </div>
+
+    <div class="mb-3">
+        <label for="imagen" class="form-label">Reemplazar imagen (opcional)</label>
+        <input type="file" name="imagen" class="form-control" />
+        <small class="text-muted">Si no selecciona un archivo, se mantendrá la imagen actual.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

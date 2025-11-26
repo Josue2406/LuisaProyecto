@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProyectoLuisa.Data;
+using ProyectoLuisa.Models;
 
 namespace ProyectoLuisa.Controllers
 {
@@ -12,7 +13,7 @@ namespace ProyectoLuisa.Controllers
             _context = context;
         }
 
-        // LISTA PÚBLICA
+        // LISTAR NOTICIAS PUBLICADAS
         public IActionResult Index()
         {
             var noticias = _context.Noticias
@@ -27,9 +28,11 @@ namespace ProyectoLuisa.Controllers
         public IActionResult Detalle(int id)
         {
             var noticia = _context.Noticias
-                .FirstOrDefault(n => n.Id == id && n.Publicada);
+                .Where(n => n.Publicada && n.Id == id)
+                .FirstOrDefault();
 
-            if (noticia == null) return NotFound();
+            if (noticia == null)
+                return NotFound();
 
             return View("~/Views/Public/Noticias/Detalle.cshtml", noticia);
         }

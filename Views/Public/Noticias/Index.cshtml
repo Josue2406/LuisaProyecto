@@ -1,25 +1,55 @@
 @model IEnumerable<ProyectoLuisa.Models.Noticia>
+@{
+    Layout = "~/Views/Public/Shared/_LayoutPublic.cshtml";
+    ViewData["Title"] = "Noticias";
+}
 
-<div class="container mt-4">
-    <h2 class="text-primary fw-bold mb-4">📰 Noticias</h2>
+<div class="container mt-4 mb-5">
 
-    @foreach (var n in Model)
+    <h2 class="text-center fw-bold text-primary mb-4">
+        📰 Noticias Recientes
+    </h2>
+
+    @if (Model == null || !Model.Any())
     {
-        <div class="card mb-4 shadow-sm">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    @if (!string.IsNullOrEmpty(n.ImagenUrl))
-                    {
-                        <img class="img-fluid w-100 h-100 object-fit-cover" src="@n.ImagenUrl" />
-                    }
-                </div>
-                <div class="col-md-8 p-3">
-                    <h4>@n.Titulo</h4>
-                    <p class="text-muted">@n.Fecha.ToString("dd/MM/yyyy")</p>
-                    <p>@n.DescripcionCorta</p>
-                    <a asp-action="Detalle" asp-route-id="@n.Id" class="btn btn-primary">Leer más</a>
-                </div>
-            </div>
+        <div class="alert alert-info text-center">
+            No hay noticias publicadas.
         </div>
     }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+            @foreach (var n in Model)
+            {
+                <div class="col">
+                    <div class="card shadow-sm h-100">
+
+                        @if (!string.IsNullOrEmpty(n.ImagenUrl))
+                        {
+                            <img src="@n.ImagenUrl" class="card-img-top"
+                                 style="height: 180px; object-fit: cover;" />
+                        }
+
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">@n.Titulo</h5>
+                            <p class="text-muted">@n.Fecha.ToString("dd/MM/yyyy")</p>
+                            <p>@n.DescripcionCorta</p>
+
+                            <a asp-controller="PublicNoticias" asp-action="Detalle" asp-route-id="@n.Id"
+   class="btn btn-primary btn-sm fw-bold">
+    Leer más <i class="bi bi-arrow-right"></i>
+</a>
+
+
+                    
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+
 </div>

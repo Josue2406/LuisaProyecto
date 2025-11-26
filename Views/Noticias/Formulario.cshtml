@@ -1,74 +1,48 @@
 @model ProyectoLuisa.Models.Noticia
 
-@{
-    bool esEdicion = Model?.Id > 0;
-    ViewData["Title"] = esEdicion ? "Editar Noticia" : "Crear Noticia";
-}
+<div class="row g-3">
 
-<div class="container mt-4">
+    <!-- TÍTULO -->
+    <div class="col-12">
+        <label asp-for="Titulo" class="form-label fw-bold"></label>
+        <input asp-for="Titulo" class="form-control" placeholder="Ingrese el título" />
+        <span asp-validation-for="Titulo" class="text-danger"></span>
+    </div>
 
-    <h2 class="text-center text-primary fw-bold mb-4">
-        @(esEdicion ? "✏️ Editar Noticia" : "📰 Crear Nueva Noticia")
-    </h2>
+    <!-- DESCRIPCION CORTA -->
+    <div class="col-12">
+        <label asp-for="DescripcionCorta" class="form-label fw-bold"></label>
+        <textarea asp-for="DescripcionCorta" class="form-control" rows="3"
+                  placeholder="Breve resumen de la noticia"></textarea>
+        <span asp-validation-for="DescripcionCorta" class="text-danger"></span>
+    </div>
 
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger text-center">@TempData["Error"]</div>
-    }
+    <!-- CONTENIDO -->
+    <div class="col-12">
+        <label asp-for="Contenido" class="form-label fw-bold"></label>
+        <textarea asp-for="Contenido" class="form-control" rows="6"
+                  placeholder="Contenido completo de la noticia"></textarea>
+        <span asp-validation-for="Contenido" class="text-danger"></span>
+    </div>
 
-    <form asp-action="@(esEdicion ? "Editar" : "Crear")" 
-          method="post" 
-          enctype="multipart/form-data"
-          class="card shadow p-4">
+    <!-- IMAGEN -->
+    <div class="col-12">
+        <label class="form-label fw-bold">Imagen</label>
+        <input type="file" name="imagen" class="form-control" accept="image/*" />
 
-        @Html.AntiForgeryToken()
-        
-        @if (esEdicion)
+        @if (Model != null && !string.IsNullOrEmpty(Model.ImagenUrl))
         {
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="ImagenUrl" />
-        }
-
-        <div class="mb-3">
-            <label asp-for="Titulo" class="form-label fw-bold"></label>
-            <input asp-for="Titulo" class="form-control" />
-            <span asp-validation-for="Titulo" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Contenido" class="form-label fw-bold"></label>
-            <textarea asp-for="Contenido" class="form-control" rows="6"></textarea>
-            <span asp-validation-for="Contenido" class="text-danger"></span>
-        </div>
-
-        <!-- Imagen -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Imagen</label>
-            <input type="file" name="imagenFile" class="form-control" accept="image/*" />
-        </div>
-
-        @if (esEdicion && !string.IsNullOrEmpty(Model.ImagenUrl))
-        {
-            <div class="mb-3 text-center">
+            <div class="mt-2">
                 <p class="fw-bold">Imagen actual:</p>
-                <img src="~/uploads/noticias/@Model.ImagenUrl" 
-                     class="img-fluid rounded border" 
-                     style="max-height: 250px;" />
+                <img src="@Model.ImagenUrl" class="img-thumbnail" style="max-width: 200px;" />
             </div>
         }
+    </div>
 
-        <div class="text-center">
-            <button type="submit" class="btn btn-success px-4">
-                @(esEdicion ? "Guardar Cambios" : "Crear Noticia")
-            </button>
+    <!-- PUBLICADA -->
+    <div class="col-12 form-check mt-3">
+        <input asp-for="Publicada" class="form-check-input" type="checkbox" />
+        <label asp-for="Publicada" class="form-check-label fw-bold">Publicar noticia</label>
+    </div>
 
-            <a asp-action="Index" class="btn btn-secondary px-4 ms-2">
-                Volver
-            </a>
-        </div>
-    </form>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

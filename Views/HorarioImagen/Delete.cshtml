@@ -1,0 +1,25 @@
+@model ProyectoLuisa.Models.HorarioImagen
+
+<h3 class="fw-bold mb-3 text-danger">🗑️ Eliminar Horario</h3>
+
+<h5>¿Estás seguro de que quieres eliminar este horario?</h5>
+
+<div class="card mb-3" style="max-width: 400px;">
+    <div class="card-body">
+        <p><strong>Grado:</strong> @Model.Grado</p>
+        <p><strong>Sección:</strong> @Model.Seccion</p>
+        <p><strong>Docente:</strong> @Model.Docente</p>
+        @if (!string.IsNullOrEmpty(Model.ImagenUrl))
+        {
+            <p><strong>Imagen:</strong></p>
+            <img src="@Url.Content(Model.ImagenUrl)" alt="Horario" style="max-width: 100%;" />
+        }
+    </div>
+</div>
+
+<form asp-action="Eliminar" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

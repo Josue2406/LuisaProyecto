@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProyectoLuisa.Data;
 
@@ -11,9 +12,11 @@ using ProyectoLuisa.Data;
 namespace ProyectoLuisa.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251126070406_HorariosImagenes")]
+    partial class HorariosImagenes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,41 +179,6 @@ namespace ProyectoLuisa.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("HorariosCards");
-                });
-
-            modelBuilder.Entity("ProyectoLuisa.Models.HorarioImagen", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Docente")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("FechaSubida")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("Grado")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImagenUrl")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Seccion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SubidoPor")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HorarioImagenes");
                 });
 
             modelBuilder.Entity("ProyectoLuisa.Models.InformacionInstitucional", b =>

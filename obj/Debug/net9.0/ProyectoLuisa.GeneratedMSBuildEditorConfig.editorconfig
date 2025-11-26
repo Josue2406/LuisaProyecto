@@ -96,6 +96,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/HorarioImagen/Crear.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9yYXJpb0ltYWdlblxDcmVhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/HorarioImagen/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9yYXJpb0ltYWdlblxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/HorarioImagen/Editar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9yYXJpb0ltYWdlblxFZGl0YXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/HorarioImagen/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9yYXJpb0ltYWdlblxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/Horarios/Crear.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9yYXJpb3NcQ3JlYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -152,6 +168,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWNpYXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/PublicInformacion/Mision.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVibGljSW5mb3JtYWNpb25cTWlzaW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/PublicInformacion/Vision.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVibGljSW5mb3JtYWNpb25cVmlzaW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/Public/Eventos/Detalle.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVibGljXEV2ZW50b3NcRGV0YWxsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -160,8 +184,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVibGljXEV2ZW50b3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/Public/Horarios/Detalle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVibGljXEhvcmFyaW9zXERldGFsbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/Public/Horarios/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVibGljXEhvcmFyaW9zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/Public/Horarios/Indexk.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVibGljXEhvcmFyaW9zXEluZGV4ay5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/Public/Horarios/Publico.cshtml]
@@ -182,6 +214,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/Public/Noticias/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVibGljXE5vdGljaWFzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/Public/PublicHorarios/Detalle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVibGljXFB1YmxpY0hvcmFyaW9zXERldGFsbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/Public/PublicHorarios/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVibGljXFB1YmxpY0hvcmFyaW9zXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/danie/OneDrive/Escritorio/asd2/LuisaProyecto/Views/Public/Shared/_LayoutPublic.cshtml]

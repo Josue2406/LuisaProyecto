@@ -1,7 +1,25 @@
 @model ProyectoLuisa.Models.Noticia
-
 @{
+    ViewData["Title"] = "Editar Noticia";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-@await Html.PartialAsync("Formulario", Model)
+<h2 class="mb-4 fw-bold text-warning">✏️ Editar Noticia</h2>
+
+<form asp-action="Editar" method="post" enctype="multipart/form-data" class="shadow p-4 bg-light rounded">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ImagenUrl" />
+
+    @await Html.PartialAsync("Formulario", Model)
+
+    <div class="mt-4 text-end">
+        <button class="btn btn-primary px-4 fw-bold">
+            <i class="bi bi-pencil-square"></i> Guardar Cambios
+        </button>
+        <a asp-action="Index" class="btn btn-secondary px-4">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+</form>

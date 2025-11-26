@@ -6,7 +6,24 @@
 
     <title>@ViewData["Title"] - Plataforma Pública</title>
 
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- ICONOS Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        .nav-link.active {
+            font-weight: bold;
+            color: #0d6efd !important;
+        }
+        footer {
+            padding: 25px 0;
+            background: #f8f9fa;
+            margin-top: 40px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
 </head>
 <body>
 
@@ -14,7 +31,7 @@
     <div class="container">
 
         <a class="navbar-brand fw-bold text-primary" asp-controller="Public" asp-action="Index">
-            Plataforma Pública
+            <i class="bi bi-house-door-fill"></i> Plataforma Pública
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#publicNav">
@@ -24,24 +41,63 @@
         <div class="collapse navbar-collapse" id="publicNav">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Public" asp-action="Index">Inicio</a>
-                </li>
+    <!-- INICIO -->
+    <li class="nav-item">
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")"
+           asp-controller="Public" asp-action="Index">
+            <i class="bi bi-house"></i> Inicio
+        </a>
+    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Public" asp-action="Eventos">Eventos</a>
-                </li>
+    <!-- EVENTOS -->
+    <li class="nav-item">
+        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PublicEventos" ? "active" : "")"
+           asp-controller="PublicEventos" asp-action="Index">
+            <i class="bi bi-calendar-event"></i> Eventos
+        </a>
+    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Public" asp-action="Horarios">Horarios</a>
-                </li>
-                <li class="nav-item">
-    <a class="nav-link" asp-controller="Public" asp-action="Noticias">
-        <i class="bi bi-newspaper"></i> Noticias
-    </a>
-</li>
+    <!-- HORARIOS -->
+    <li class="nav-item">
+        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PublicHorarios" ? "active" : "")"
+           asp-controller="PublicHorarios" asp-action="Index">
+            <i class="bi bi-clock-history"></i> Horarios
+        </a>
+    </li>
 
-            </ul>
+    <!-- NOTICIAS -->
+    <li class="nav-item">
+        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PublicNoticias" ? "active" : "")"
+           asp-controller="PublicNoticias" asp-action="Index">
+            <i class="bi bi-newspaper"></i> Noticias
+        </a>
+    </li>
+
+    <!-- INFORMACIÓN (Dropdown nuevo) -->
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle 
+            @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PublicInformacion" ? "active" : "")"
+            href="#" id="infoDropdown" role="button" data-bs-toggle="dropdown">
+            <i class="bi bi-info-circle"></i> Información
+        </a>
+
+        <ul class="dropdown-menu" aria-labelledby="infoDropdown">
+            <li>
+                <a class="dropdown-item" asp-controller="PublicInformacion" asp-action="Mision">
+                    <i class="bi bi-bullseye"></i> Misión
+                </a>
+            </li>
+
+            <li>
+                <a class="dropdown-item" asp-controller="PublicInformacion" asp-action="Vision">
+                    <i class="bi bi-eye"></i> Visión
+                </a>
+            </li>
+        </ul>
+    </li>
+
+</ul>
+
         </div>
 
     </div>
@@ -51,6 +107,15 @@
     @RenderBody()
 </div>
 
+<footer class="text-center text-muted">
+    <div class="container">
+        © @DateTime.Now.Year - Plataforma Pública · Todos los derechos reservados
+    </div>
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+@RenderSection("Scripts", required: false)
+
 </body>
 </html>
