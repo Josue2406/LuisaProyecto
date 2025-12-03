@@ -46,7 +46,7 @@
         <div class="container">
 
             <!-- LOGO -->
-            <a class="navbar-brand text-primary" asp-controller="Admin" asp-action="Index">
+            <a class="navbar-brand text-primary" asp-controller="AdmInicio" asp-action="Index">
                 <i class="bi bi-speedometer2"></i> Plataforma Luisa
             </a>
 
@@ -61,8 +61,8 @@
 
                     <!-- Inicio -->
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Admin" ? "active" : "")"
-                           asp-controller="Admin" asp-action="Index">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "AdmInicio" ? "active" : "")"
+                           asp-controller="AdmInicio" asp-action="Index">
                             <i class="bi bi-house-door"></i> Inicio
                         </a>
                     </li>
@@ -112,11 +112,12 @@
                     @if (Context.Session.GetString("Rol") == "Admin")
                     {
                         <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Panel" ? "active" : "") fw-semibold text-primary"
-                               asp-controller="Panel" asp-action="Index">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Admin" ? "active" : "") fw-semibold text-primary"
+                               asp-controller="Admin" asp-action="Index">
                                 <i class="bi bi-gear-wide-connected"></i> Panel Admin
                             </a>
                         </li>
+
                     }
                 </ul>
 

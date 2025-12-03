@@ -1,54 +1,75 @@
 @model ProyectoLuisa.Models.HorarioImagen
 
-@{
-    ViewData["Title"] = "Editar Horario";
-}
+<h3 class="fw-bold mb-3">✏️ Editar Horario</h3>
 
-<h2>Editar Horario</h2>
-
-<form asp-action="Editar" asp-controller="HorarioImagen" method="post" enctype="multipart/form-data">
+<form asp-action="Editar" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
 
     <div class="mb-3">
-        <label asp-for="Grado" class="form-label"></label>
-        <input asp-for="Grado" class="form-control" />
+        <label class="form-label">Grado</label>
+        <select asp-for="Grado" class="form-select" required>
+            <option value="">-- Seleccione Grado --</option>
+            @foreach (var grado in ViewBag.Grados as List<string>)
+            {
+                if (grado == Model.Grado.ToString())
+                {
+                    <option value="@grado" selected="selected">@grado</option>
+                }
+                else
+                {
+                    <option value="@grado">@grado</option>
+                }
+            }
+        </select>
         <span asp-validation-for="Grado" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Seccion" class="form-label"></label>
-        <input asp-for="Seccion" class="form-control" />
+        <label class="form-label">Sección</label>
+        <select asp-for="Seccion" class="form-select" required>
+            <option value="">-- Seleccione Sección --</option>
+            @foreach (var seccion in ViewBag.Secciones as List<string>)
+            {
+                if (seccion == Model.Seccion)
+                {
+                    <option value="@seccion" selected="selected">@seccion</option>
+                }
+                else
+                {
+                    <option value="@seccion">@seccion</option>
+                }
+            }
+        </select>
         <span asp-validation-for="Seccion" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Docente" class="form-label"></label>
-        <input asp-for="Docente" class="form-control" />
+        <label class="form-label">Docente</label>
+        <select asp-for="Docente" class="form-select" required>
+            <option value="">-- Seleccione Docente --</option>
+            @foreach (var docente in ViewBag.Docentes as List<string>)
+            {
+                if (docente == Model.Docente)
+                {
+                    <option value="@docente" selected="selected">@docente</option>
+                }
+                else
+                {
+                    <option value="@docente">@docente</option>
+                }
+            }
+        </select>
         <span asp-validation-for="Docente" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label>Imagen actual:</label><br />
+        <label class="form-label">Imagen del horario</label>
+        <input type="file" name="imagen" class="form-control" />
         @if (!string.IsNullOrEmpty(Model.ImagenUrl))
         {
-            <img src="@Model.ImagenUrl" alt="Horario" class="img-thumbnail mb-2" style="max-width: 200px;" />
-        }
-        else
-        {
-            <p>No hay imagen cargada</p>
+            <small class="text-muted">Imagen actual: <a href="@Model.ImagenUrl" target="_blank">Ver</a></small>
         }
     </div>
 
-    <div class="mb-3">
-        <label for="imagen" class="form-label">Reemplazar imagen (opcional)</label>
-        <input type="file" name="imagen" class="form-control" />
-        <small class="text-muted">Si no selecciona un archivo, se mantendrá la imagen actual.</small>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Guardar cambios</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    <button class="btn btn-success">Guardar Cambios</button>
 </form>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

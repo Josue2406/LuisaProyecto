@@ -13,10 +13,11 @@ namespace ProyectoLuisa.Controllers
             _context = context;
         }
 
-        // Mostrar información
+        // GET: Editar información
         public IActionResult Index()
         {
             var info = _context.InformacionInstitucional.FirstOrDefault();
+
             if (info == null)
             {
                 info = new InformacionInstitucional();
@@ -27,11 +28,15 @@ namespace ProyectoLuisa.Controllers
             return View(info);
         }
 
-        // Guardar cambios
+        // POST: Guardar información
         [HttpPost]
         public IActionResult Guardar(InformacionInstitucional model)
         {
+            if (!ModelState.IsValid)
+                return View("Index", model);
+
             var info = _context.InformacionInstitucional.FirstOrDefault();
+
             if (info == null)
             {
                 _context.InformacionInstitucional.Add(model);
@@ -50,6 +55,7 @@ namespace ProyectoLuisa.Controllers
 
             _context.SaveChanges();
             TempData["Mensaje"] = "Información institucional actualizada correctamente.";
+
             return RedirectToAction("Index");
         }
     }

@@ -86,7 +86,7 @@ public IActionResult Recuperar(string email)
             switch (usuario.Rol)
             {
                 case "Admin":
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("Index", "AdmInicio");
                 case "Docente":
                     return RedirectToAction("Inicio", "Docente");
                 case "Usuario":

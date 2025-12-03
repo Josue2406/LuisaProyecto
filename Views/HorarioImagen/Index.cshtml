@@ -1,5 +1,10 @@
 @model IEnumerable<ProyectoLuisa.Models.HorarioImagen>
 
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Gestión de Horarios";
+}
+
 <h2 class="mb-4 text-primary">📚 Horarios (Administración)</h2>
 
 <a asp-action="Crear" class="btn btn-success mb-3">

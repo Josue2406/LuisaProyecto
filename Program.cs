@@ -125,6 +125,7 @@ app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Inicio}/{action=Index}/{id?}");
 
+
 // 👇 Nuevo: soporte para áreas (no cambia nada de lo actual)
 // ✅ Deja tu ruta por defecto como la tienes (Login)
 app.MapControllerRoute(

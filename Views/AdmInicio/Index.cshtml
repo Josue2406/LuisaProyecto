@@ -1,0 +1,79 @@
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Panel Administrativo";
+}
+
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col text-center">
+            <h1 class="fw-bold text-primary">
+                <i class="bi bi-speedometer2"></i> Bienvenido al Panel Administrativo
+            </h1>
+            <p class="lead">Desde aquí puedes gestionar toda la información del sistema.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Card Docentes -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-people text-primary" style="font-size: 2.5rem;"></i>
+                    <h5 class="card-title mt-2">Docentes</h5>
+                    <p class="card-text">Total: <strong>@ViewBag.TotalDocentes</strong></p>
+                    <a asp-controller="Admin" asp-action="Index" class="btn btn-primary btn-sm">Ver</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Noticias -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-newspaper text-success" style="font-size: 2.5rem;"></i>
+                    <h5 class="card-title mt-2">Noticias</h5>
+                    <p class="card-text">Total: <strong>@ViewBag.TotalNoticias</strong></p>
+                    <a asp-controller="Noticias" asp-action="Index" class="btn btn-success btn-sm">Ver</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Eventos -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-calendar-event text-warning" style="font-size: 2.5rem;"></i>
+                    <h5 class="card-title mt-2">Eventos</h5>
+                    <p class="card-text">Total: <strong>@ViewBag.TotalEventos</strong></p>
+                    <a asp-controller="Eventos" asp-action="Index" class="btn btn-warning btn-sm">Ver</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Archivos -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-folder2 text-info" style="font-size: 2.5rem;"></i>
+                    <h5 class="card-title mt-2">Archivos</h5>
+                    <p class="card-text">Total: <strong>@ViewBag.TotalArchivos</strong></p>
+                    <a asp-controller="Archivos" asp-action="Index" class="btn btn-info btn-sm">Ver</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Información -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-info-circle text-primary" style="font-size: 2.5rem;"></i>
+                    <h5 class="card-title mt-2">Información</h5>
+                    <p class="card-text">Editar misión, visión, valores y datos de contacto</p>
+                    <a asp-controller="Informacion" asp-action="Index" class="btn btn-primary btn-sm">Ir</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

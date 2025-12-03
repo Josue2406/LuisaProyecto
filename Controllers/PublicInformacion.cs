@@ -1,17 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
+using ProyectoLuisa.Data;
 
 namespace ProyectoLuisa.Controllers.PublicInformacion
 {
     public class PublicInformacionController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public PublicInformacionController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Mision()
         {
-            return View();
+            var info = _context.InformacionInstitucional.FirstOrDefault();
+            return View(info);
         }
 
         public IActionResult Vision()
         {
-            return View();
+            var info = _context.InformacionInstitucional.FirstOrDefault();
+            return View(info);
         }
     }
 }

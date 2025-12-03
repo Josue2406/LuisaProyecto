@@ -24,8 +24,10 @@ public class HorarioImagenController : Controller
         return View(lista);
     }
 
+    // -------------------- Crear --------------------
     public IActionResult Crear()
     {
+        CargarDatosParaSelects();
         return View(new HorarioImagen());
     }
 
@@ -33,7 +35,10 @@ public class HorarioImagenController : Controller
     public IActionResult Crear(HorarioImagen model, IFormFile imagen)
     {
         if (!ModelState.IsValid)
+        {
+            CargarDatosParaSelects();
             return View(model);
+        }
 
         if (imagen != null && imagen.Length > 0)
         {
@@ -58,77 +63,64 @@ public class HorarioImagenController : Controller
         return RedirectToAction("Index");
     }
 
+    // -------------------- Editar --------------------
     public IActionResult Editar(int id)
     {
         var h = _context.HorarioImagenes.Find(id);
         if (h == null) return NotFound();
 
+        CargarDatosParaSelects();
         return View(h);
     }
 
     [HttpPost]
-public IActionResult Editar(HorarioImagen model, IFormFile? imagen)
-{
-    // Validación de campos requeridos
-    if (!ModelState.IsValid)
+    public IActionResult Editar(HorarioImagen model, IFormFile? imagen)
     {
-        // Opcional: imprimir errores en consola para debug
-        var errores = ModelState.Values.SelectMany(v => v.Errors);
-        foreach (var e in errores)
-            Console.WriteLine(e.ErrorMessage);
-
-        // Retorna la vista con los datos ingresados para corregir
-        return View(model);
-    }
-
-    // Buscar el registro en la base de datos
-    var h = _context.HorarioImagenes.Find(model.Id);
-    if (h == null)
-        return NotFound();
-
-    // Actualizar solo los campos de texto
-    h.Grado = model.Grado;
-    h.Seccion = model.Seccion;
-    h.Docente = model.Docente;
-
-    // Reemplazar imagen solo si se subió una nueva
-    if (imagen != null && imagen.Length > 0)
-    {
-        // Eliminar imagen anterior si existe
-        if (!string.IsNullOrEmpty(h.ImagenUrl))
+        if (!ModelState.IsValid)
         {
-            string rutaVieja = Path.Combine(_env.WebRootPath, h.ImagenUrl.TrimStart('/'));
-            if (System.IO.File.Exists(rutaVieja))
-                System.IO.File.Delete(rutaVieja);
+            CargarDatosParaSelects();
+            return View(model);
         }
 
-        // Guardar nueva imagen
-        string archivo = Guid.NewGuid() + Path.GetExtension(imagen.FileName);
-        string carpetaRel = Path.Combine("uploads/horarios", archivo);
-        string rutaFisica = Path.Combine(_env.WebRootPath, carpetaRel);
+        var h = _context.HorarioImagenes.Find(model.Id);
+        if (h == null) return NotFound();
 
-        Directory.CreateDirectory(Path.GetDirectoryName(rutaFisica)!);
+        h.Grado = model.Grado;
+        h.Seccion = model.Seccion;
+        h.Docente = model.Docente;
 
-        using var stream = new FileStream(rutaFisica, FileMode.Create);
-        imagen.CopyTo(stream);
+        if (imagen != null && imagen.Length > 0)
+        {
+            if (!string.IsNullOrEmpty(h.ImagenUrl))
+            {
+                string rutaVieja = Path.Combine(_env.WebRootPath, h.ImagenUrl.TrimStart('/'));
+                if (System.IO.File.Exists(rutaVieja))
+                    System.IO.File.Delete(rutaVieja);
+            }
 
-        h.ImagenUrl = "/" + carpetaRel.Replace("\\", "/");
+            string archivo = Guid.NewGuid() + Path.GetExtension(imagen.FileName);
+            string carpetaRel = Path.Combine("uploads/horarios", archivo);
+            string rutaFisica = Path.Combine(_env.WebRootPath, carpetaRel);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(rutaFisica)!);
+
+            using var stream = new FileStream(rutaFisica, FileMode.Create);
+            imagen.CopyTo(stream);
+
+            h.ImagenUrl = "/" + carpetaRel.Replace("\\", "/");
+        }
+
+        _context.SaveChanges();
+        return RedirectToAction("Index");
     }
 
-    _context.SaveChanges();
-
-    // Redirigir al índice después de guardar
-    return RedirectToAction("Index");
-}
-
-
+    // -------------------- Eliminar --------------------
     [HttpPost]
     public IActionResult Eliminar(int id)
     {
         var h = _context.HorarioImagenes.Find(id);
         if (h == null) return NotFound();
 
-        // Eliminar archivo físico
         if (!string.IsNullOrEmpty(h.ImagenUrl))
         {
             string ruta = Path.Combine(_env.WebRootPath, h.ImagenUrl.TrimStart('/'));
@@ -140,5 +132,21 @@ public IActionResult Editar(HorarioImagen model, IFormFile? imagen)
         _context.SaveChanges();
 
         return RedirectToAction("Index");
+    }
+
+    // -------------------- Método auxiliar para cargar selects --------------------
+    private void CargarDatosParaSelects()
+    {
+        // Grados 1 a 6
+        ViewBag.Grados = Enumerable.Range(1, 6).Select(g => g.ToString()).ToList();
+
+        // Secciones fijas
+        ViewBag.Secciones = new List<string> { "A", "B", "C", "D" };
+
+        // Docentes registrados
+        ViewBag.Docentes = _context.Usuarios
+                            .Where(u => u.Rol == "Docente")
+                            .Select(u => u.Nombre)
+                            .ToList();
     }
 }

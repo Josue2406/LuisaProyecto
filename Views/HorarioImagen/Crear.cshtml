@@ -3,30 +3,46 @@
 <h3 class="fw-bold mb-3">📤 Subir Horario</h3>
 
 <form asp-action="Crear" enctype="multipart/form-data">
-
     <div class="mb-3">
-        <label class="form-label">Grado (1 a 6)</label>
-        <input asp-for="Grado" type="number" min="1" max="6" class="form-control" />
+        <label class="form-label">Grado</label>
+        <select asp-for="Grado" class="form-select" required>
+            <option value="">-- Seleccione Grado --</option>
+            @foreach (var grado in ViewBag.Grados as List<string>)
+            {
+                <option value="@grado">@grado</option>
+            }
+        </select>
         <span asp-validation-for="Grado" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Sección</label>
-        <input asp-for="Seccion" class="form-control" />
+        <select asp-for="Seccion" class="form-select" required>
+            <option value="">-- Seleccione Sección --</option>
+            @foreach (var seccion in ViewBag.Secciones as List<string>)
+            {
+                <option value="@seccion">@seccion</option>
+            }
+        </select>
         <span asp-validation-for="Seccion" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Docente</label>
-        <input asp-for="Docente" class="form-control" />
+        <select asp-for="Docente" class="form-select" required>
+            <option value="">-- Seleccione Docente --</option>
+            @foreach (var docente in ViewBag.Docentes as List<string>)
+            {
+                <option value="@docente">@docente</option>
+            }
+        </select>
         <span asp-validation-for="Docente" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Imagen del horario</label>
-        <input type="file" name="imagen" class="form-control" />
+        <input type="file" name="imagen" class="form-control" required />
     </div>
 
     <button class="btn btn-primary">Guardar</button>
-
 </form>
