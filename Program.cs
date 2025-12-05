@@ -27,6 +27,7 @@ if (!Directory.Exists(uploadsPath))
 {
     Directory.CreateDirectory(uploadsPath);
 }
+
 // Servicio de correos
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddSession();

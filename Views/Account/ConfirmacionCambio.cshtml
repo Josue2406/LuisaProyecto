@@ -1,27 +1,6 @@
 @{
-    
-    ViewData["Title"] = "Contraseña Actualizada";
+    ViewData["Title"] = "Contraseña Cambiada";
 }
-
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm border-success">
-                <div class="card-body text-center py-5">
-                    <div class="mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#28a745" class="bi bi-check-circle" viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zM8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0z"/>
-                            <path d="M10.97 5.97a.75.75 0 0 1 1.07 1.05L7.477 11.5l-2.97-2.97a.75.75 0 1 1 1.06-1.06l1.89 1.89 4.513-4.39z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-success mb-3">¡Contraseña actualizada!</h3>
-                    <p class="text-muted mb-4">
-                        Tu nueva contraseña se ha guardado correctamente.<br>
-                        Ahora puedes iniciar sesión con tus nuevas credenciales.
-                    </p>
-                    <a href="/Login" class="btn btn-success px-4 py-2">Ir al inicio de sesión</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<h1>Contraseña actualizada</h1>
+<p>Tu contraseña ha sido cambiada correctamente. Ahora puedes iniciar sesión.</p>
+<a href="@Url.Action("Index","Login")">Ir a Iniciar Sesión</a>

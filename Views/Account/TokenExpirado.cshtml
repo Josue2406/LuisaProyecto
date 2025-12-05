@@ -1,30 +1,6 @@
 @{
-    ViewData["Title"] = "Enlace Expirado o No Válido";
+    ViewData["Title"] = "Token Expirado";
 }
-
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm border-danger">
-                <div class="card-body text-center py-5">
-                    <div class="mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#dc3545" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
-                            <path d="M7.938 2.016a.13.13 0 0 1 .125 0l6.857 11.856c.022.037.022.084 0 .121a.13.13 0 0 1-.125.007H1.205a.13.13 0 0 1-.125-.007.125.125 0 0 1 0-.121L7.938 2.016zm.563-.97a1.13 1.13 0 0 0-1.002 0L.642 12.902A1.125 1.125 0 0 0 1.205 14h13.59a1.125 1.125 0 0 0 .563-1.098L8.5 1.046z"/>
-                            <path d="M7.002 11a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm.93-6.481a.5.5 0 0 0-.86 0L6.05 8.482a.5.5 0 0 0 .43.748h3.04a.5.5 0 0 0 .43-.748L7.932 4.519z"/>
-                        </svg>
-                    </div>
-
-                    <h3 class="text-danger mb-3">¡Enlace no válido o expirado!</h3>
-                    <p class="text-muted mb-4">
-                        El enlace de recuperación de contraseña que intentaste usar ha expirado o no es válido.<br>
-                        No te preocupes, puedes solicitar uno nuevo.
-                    </p>
-
-                    <a href="/Account/Recuperar" class="btn btn-danger px-4 py-2">
-                        Solicitar nuevo enlace
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<h1>Enlace inválido o expirado</h1>
+<p>El enlace que intentas usar ya no es válido. Solicita un nuevo enlace de recuperación de contraseña.</p>
+<a href="@Url.Action("Recuperar","Account")">Solicitar nuevo enlace</a>

@@ -23,5 +23,12 @@ namespace ProyectoLuisa.Controllers.PublicInformacion
             var info = _context.InformacionInstitucional.FirstOrDefault();
             return View(info);
         }
+
+        public IActionResult Historia()
+{
+    var info = _context.InformacionInstitucional.FirstOrDefault();
+    return View(info);
+}
+
     }
 }

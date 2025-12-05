@@ -1,28 +1,22 @@
 @{
-    
     ViewData["Title"] = "Activar Cuenta";
 }
+<h1>Activar Cuenta</h1>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h3 class="text-center mb-3">Activar Cuenta</h3>
-                    <p>Estás activando la cuenta asociada al correo: <strong>@ViewBag.Email</strong></p>
+@if(ViewBag.Error != null)
+{
+    <div style="color:red;">@ViewBag.Error</div>
+}
 
-                    <form method="post">
-                        <input type="hidden" name="email" value="@ViewBag.Email" />
-
-                        <div class="mb-3">
-                            <label for="nuevaContrasena" class="form-label">Nueva Contraseña</label>
-                            <input type="password" name="nuevaContrasena" class="form-control" required minlength="6" />
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100">Activar Cuenta</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+<form method="post">
+    <input type="hidden" name="email" value="@ViewBag.Email" />
+    <div>
+        <label>Contraseña temporal:</label>
+        <input type="password" name="temporal" value="@ViewBag.Temp" required />
     </div>
-</div>
+    <div>
+        <label>Nueva contraseña:</label>
+        <input type="password" name="nuevaContrasena" required />
+    </div>
+    <button type="submit">Activar cuenta</button>
+</form>

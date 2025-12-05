@@ -1,32 +1,18 @@
 @{
     ViewData["Title"] = "Restablecer Contraseña";
 }
+<h1>Restablecer Contraseña</h1>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h3 class="text-center mb-3">Restablecer Contraseña</h3>
-                    <p>Introduce tu nueva contraseña.</p>
+@if(ViewBag.Error != null)
+{
+    <div style="color:red;">@ViewBag.Error</div>
+}
 
-                    <form method="post">
-                        <input type="hidden" name="token" value="@ViewBag.Token" />
-
-                        <div class="mb-3">
-                            <label for="nuevaContrasena" class="form-label">Nueva Contraseña</label>
-                            <input type="password" name="nuevaContrasena" class="form-control" required minlength="6" />
-                        </div>
-
-                        <button type="submit" class="btn btn-success w-100">Guardar Nueva Contraseña</button>
-
-                        @if (ViewBag.Error != null)
-                        {
-                            <p class="text-danger mt-3 text-center">@ViewBag.Error</p>
-                        }
-                    </form>
-                </div>
-            </div>
-        </div>
+<form method="post">
+    <input type="hidden" name="token" value="@ViewBag.Token" />
+    <div>
+        <label>Nueva contraseña:</label>
+        <input type="password" name="nuevaContrasena" required />
     </div>
-</div>
+    <button type="submit">Cambiar contraseña</button>
+</form>

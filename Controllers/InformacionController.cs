@@ -45,7 +45,7 @@ namespace ProyectoLuisa.Controllers
             {
                 info.Mision = model.Mision;
                 info.Vision = model.Vision;
-                info.Valores = model.Valores;
+                info.Historia = model.Historia;
                 info.Telefono = model.Telefono;
                 info.Correo = model.Correo;
                 info.Direccion = model.Direccion;

@@ -1,50 +1,72 @@
 @model ProyectoLuisa.Models.InformacionInstitucional
 @{
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml"; 
-    ViewData["Title"] = "Gestión de Información Institucional";}
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Gestión de Información Institucional";
+}
 
 <h2>Información Institucional</h2>
 
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["Mensaje"]</div>
+}
+
 <form asp-action="Guardar" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div class="form-group">
         <label>Misión</label>
         <textarea asp-for="Mision" class="form-control"></textarea>
+        <span asp-validation-for="Mision" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label>Visión</label>
         <textarea asp-for="Vision" class="form-control"></textarea>
+        <span asp-validation-for="Vision" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label>Valores</label>
-        <textarea asp-for="Valores" class="form-control"></textarea>
-    </div>
+  <div class="form-group">
+    <label>Historia</label>
+    <textarea asp-for="Historia" class="form-control"></textarea>
+    <span asp-validation-for="Historia" class="text-danger"></span>
+</div>
+
 
     <div class="form-group">
         <label>Teléfono</label>
         <input asp-for="Telefono" class="form-control" />
+        <span asp-validation-for="Telefono" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label>Correo</label>
         <input asp-for="Correo" class="form-control" />
+        <span asp-validation-for="Correo" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label>Dirección</label>
         <input asp-for="Direccion" class="form-control" />
+        <span asp-validation-for="Direccion" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label>Logo URL</label>
         <input asp-for="LogoUrl" class="form-control" />
+        <span asp-validation-for="LogoUrl" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label>Texto Footer</label>
         <textarea asp-for="FooterTexto" class="form-control"></textarea>
+        <span asp-validation-for="FooterTexto" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary mt-3">Guardar</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

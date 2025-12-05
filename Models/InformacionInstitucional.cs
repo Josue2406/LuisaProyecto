@@ -13,8 +13,11 @@ namespace ProyectoLuisa.Models
         [Required, StringLength(500)]
         public string Vision { get; set; } = string.Empty;
 
+      /*  [StringLength(500)]
+        public string Valores { get; set; } = string.Empty; */
+
         [StringLength(500)]
-        public string Valores { get; set; } = string.Empty;
+public string Historia { get; set; } = string.Empty;
 
         [StringLength(100)]
         public string Telefono { get; set; } = string.Empty;
