@@ -1,17 +1,34 @@
 @{
+    Layout = "~/Views/Public/Shared/_LayoutPublic.cshtml";
     ViewData["Title"] = "Recuperar Contraseña";
 }
-<h1>Recuperar Contraseña</h1>
 
-@if(ViewBag.Error != null)
-{
-    <div style="color:red;">@ViewBag.Error</div>
-}
+<div class="container mt-5" style="max-width: 500px;">
+    <h2 class="mb-4">Recuperar Contraseña</h2>
 
-<form method="post">
-    <div>
-        <label>Correo electrónico:</label>
-        <input type="email" name="correo" required />
-    </div>
-    <button type="submit">Enviar enlace de recuperación</button>
-</form>
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    @if (ViewBag.Mensaje != null)
+    {
+        <div class="alert alert-success">@ViewBag.Mensaje</div>
+    }
+
+    <form asp-controller="Account" asp-action="Recuperar" method="post">
+        <div class="mb-3">
+            <label for="correo" class="form-label">Correo electrónico</label>
+            <input type="email"
+                   class="form-control"
+                   id="correo"
+                   name="correo"
+                   placeholder="ejemplo@correo.com"
+                   required />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+            Enviar enlace
+        </button>
+    </form>
+</div>

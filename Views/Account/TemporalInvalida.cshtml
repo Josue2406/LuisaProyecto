@@ -1,0 +1,11 @@
+@{
+    
+    Layout = "~/Views/Public/Shared/_LayoutPublic.cshtml";
+    ViewData["Title"] = "Contraseña Temporal Inválida";
+}
+
+<div class="container mt-5 text-center" style="max-width:500px;">
+    <h2 class="mb-4 text-danger">Contraseña Temporal Inválida</h2>
+    <p>La contraseña temporal que estás usando es incorrecta o ha expirado.</p>
+    <a asp-controller="Account" asp-action="Recuperar" class="btn btn-warning mt-3">Solicitar nueva contraseña</a>
+</div>

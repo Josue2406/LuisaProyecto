@@ -1,6 +1,17 @@
 @{
+      Layout = "~/Views/Public/Shared/_LayoutPublic.cshtml";
+
     ViewData["Title"] = "Token Expirado";
 }
-<h1>Enlace inválido o expirado</h1>
-<p>El enlace que intentas usar ya no es válido. Solicita un nuevo enlace de recuperación de contraseña.</p>
-<a href="@Url.Action("Recuperar","Account")">Solicitar nuevo enlace</a>
+
+<div class="container mt-5 text-center" style="max-width:500px;">
+    <h2 class="mb-4 text-danger">Token Expirado o Inválido</h2>
+    <p>El enlace que intentaste usar ha expirado o es incorrecto.</p>
+
+    <form asp-action="ReenviarInvitacion" method="post">
+        <input type="hidden" name="email" value="@ViewBag.Correo" />
+        <button type="submit" class="btn btn-warning mt-3">Solicitar nueva invitación</button>
+    </form>
+
+    <a asp-controller="Login" asp-action="Index" class="btn btn-secondary mt-3">Volver al inicio de sesión</a>
+</div>

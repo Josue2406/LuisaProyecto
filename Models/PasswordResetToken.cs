@@ -13,6 +13,10 @@ namespace ProyectoLuisa.Models
         [Required]
         public string Token { get; set; } = string.Empty;
 
-        public DateTime Expira { get; set; } = DateTime.Now.AddHours(1);
+
+        public DateTime Expira { get; set; } = DateTime.UtcNow.AddHours(24); // 24h para invitación
+
+        
+
     }
 }

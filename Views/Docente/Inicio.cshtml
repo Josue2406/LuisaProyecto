@@ -3,9 +3,65 @@
     ViewData["Title"] = "Panel del Docente";
 }
 
-<div class="container mt-5 text-center">
-    <h2>Bienvenido al Panel del Docente</h2>
-    <p class="text-muted">Aquí verás tus cursos, estudiantes y materiales.</p>
+<div class="container mt-5">
 
-    <a href="/Login" class="btn btn-secondary mt-3">Cerrar sesión</a>
+    <div class="card shadow-lg border-0 mx-auto" style="max-width: 750px; border-radius: 18px;">
+        <div class="card-body p-5 text-center">
+
+            <div class="mb-4">
+                <i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: #0d6efd;"></i>
+            </div>
+
+            <h2 class="fw-bold mb-3">¡Bienvenido, Docente!</h2>
+
+            <p class="text-muted fs-5">
+                Este es tu panel principal donde podrás administrar:
+            </p>
+
+            <div class="row mt-4 justify-content-center">
+                <div class="col-10 col-md-4 mb-3">
+                    <div class="p-3 border rounded-4 shadow-sm hover-card">
+                        <i class="bi bi-book-half fs-1 text-primary"></i>
+                        <p class="fw-semibold mt-2 mb-0">Cursos Asignados</p>
+                    </div>
+                </div>
+
+                <div class="col-10 col-md-4 mb-3">
+                    <div class="p-3 border rounded-4 shadow-sm hover-card">
+                        <i class="bi bi-people-fill fs-1 text-success"></i>
+                        <p class="fw-semibold mt-2 mb-0">Estudiantes</p>
+                    </div>
+                </div>
+
+                <div class="col-10 col-md-4 mb-3">
+                    <div class="p-3 border rounded-4 shadow-sm hover-card">
+                        <i class="bi bi-folder2-open fs-1 text-warning"></i>
+                        <p class="fw-semibold mt-2 mb-0">Material Didáctico</p>
+                    </div>
+                </div>
+            </div>
+
+            <a href="/Login" class="btn btn-danger mt-4 px-4 py-2 fw-semibold">
+                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+            </a>
+        </div>
+    </div>
+
 </div>
+
+<style>
+    .hover-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+        background-color: #fafafa;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    }
+
+    .card {
+        background: #ffffff;
+    }
+</style>

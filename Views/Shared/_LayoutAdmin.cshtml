@@ -13,136 +13,200 @@
 
     <style>
         body {
-            background-color: #f7f7f7;
             font-family: 'Segoe UI', sans-serif;
+            background-color: #f7f7f7;
         }
-        .navbar-brand {
-            font-weight: 600;
-            font-size: 1.25rem;
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 240px;
+            background-color: #ffffff;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.05);
+            padding-top: 1rem;
         }
-        .nav-link {
+
+        .sidebar .brand {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #00b873;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar .brand i {
+            margin-right: 0.5rem;
+        }
+
+        .sidebar .nav-link {
+            color: #555;
             font-weight: 500;
-            color: #333 !important;
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
         }
-        .nav-link.active {
+
+        .sidebar .nav-link i {
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #e6f8f1;
+            color: #00b873;
             font-weight: 600;
-            color: #0d6efd !important;
-            border-bottom: 2px solid #0d6efd;
+            border-left: 4px solid #00b873;
         }
-        footer {
-            background: #f1f1f1;
-            border-top: 1px solid #ddd;
-            padding: 18px 0;
-            text-align: center;
-            margin-top: 40px;
+
+        .sidebar .nav-link:hover {
+            background-color: #f0fdf6;
+            color: #00b873;
+        }
+
+        /* Contenido */
+        .main-content {
+            margin-left: 240px;
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+        }
+
+        /* Usuario en sidebar */
+        .sidebar .user-info {
+            position: absolute;
+            bottom: 1rem;
+            width: 100%;
+            padding: 0 1rem;
+        }
+
+        .sidebar .btn-logout {
+            width: 100%;
+            font-weight: 500;
+            background-color: #dc3545;
+            color: #fff;
+            border-radius: 6px;
+            padding: 6px;
+            margin-top: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .sidebar .btn-logout:hover {
+            background-color: #b02a37;
+        }
+
+        /* Responsivo */
+        @@media (max-width: 992px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                box-shadow: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar .user-info {
+                position: relative;
+                padding: 1rem 1rem;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- NAVBAR ADMIN -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm sticky-top">
-        <div class="container">
+    <!-- SIDEBAR -->
+   <div class="sidebar">
+        <a class="brand"
+           asp-controller="@(Context.Session.GetString("Rol") == "Docente" ? "Docente" : "AdmInicio")"
+           asp-action="@(Context.Session.GetString("Rol") == "Docente" ? "Inicio" : "Index")">
+            <i class="bi bi-speedometer2"></i> Plataforma Luisa
+        </a>
 
-            <!-- LOGO -->
-            <a class="navbar-brand text-primary" asp-controller="AdmInicio" asp-action="Index">
-                <i class="bi bi-speedometer2"></i> Plataforma Luisa
-            </a>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == 
+                    (Context.Session.GetString("Rol") == "Docente" ? "Docente" : "AdmInicio") ? "active" : "")"
+                   asp-controller="@(Context.Session.GetString("Rol") == "Docente" ? "Docente" : "AdmInicio")"
+                   asp-action="@(Context.Session.GetString("Rol") == "Docente" ? "Inicio" : "Index")">
+                    <i class="bi bi-house-door"></i> Inicio
+                </a>
+            </li>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Eventos" ? "active" : "")"
+                   asp-controller="Eventos" asp-action="Index">
+                    <i class="bi bi-calendar-event"></i> Eventos
+                </a>
+            </li>
 
-            <div class="collapse navbar-collapse" id="adminNav">
-
-                <!-- MENÚ IZQUIERDO -->
-                <ul class="navbar-nav me-auto">
-
-                    <!-- Inicio -->
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "AdmInicio" ? "active" : "")"
-                           asp-controller="AdmInicio" asp-action="Index">
-                            <i class="bi bi-house-door"></i> Inicio
-                        </a>
-                    </li>
-
-                    <!-- Eventos -->
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Eventos" ? "active" : "")"
-                           asp-controller="Eventos" asp-action="Index">
-                            <i class="bi bi-calendar-event"></i> Eventos
-                        </a>
-                    </li>
-
-                    <!-- Horarios -->
-                    <li class="nav-item">
-    <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "HorarioImagen" ? "active" : "")"
-       asp-controller="HorarioImagen" asp-action="Index">
-        <i class="bi bi-clock-history"></i> Horarios
-    </a>
-</li>
-
-
-                    <!-- Información -->
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Informacion" ? "active" : "")"
-                           asp-controller="Informacion" asp-action="Index">
-                            <i class="bi bi-info-circle"></i> Información
-                        </a>
-                    </li>
-
-                    <!-- Archivos -->
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Archivos" ? "active" : "")"
-                           asp-controller="Archivos" asp-action="Index">
-                            <i class="bi bi-folder2"></i> Archivos
-                        </a>
-                    </li>
-
-                    <!-- Noticias -->
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Noticias" ? "active" : "")"
-                           asp-controller="Noticias" asp-action="Index">
-                            <i class="bi bi-newspaper"></i> Noticias
-                        </a>
-                    </li>
-
-                    <!-- Panel Admin -->
-                    @if (Context.Session.GetString("Rol") == "Admin")
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Admin" ? "active" : "") fw-semibold text-primary"
-                               asp-controller="Admin" asp-action="Index">
-                                <i class="bi bi-gear-wide-connected"></i> Panel Admin
-                            </a>
-                        </li>
-
-                    }
-                </ul>
-
-                <!-- USUARIO -->
-                <div class="d-flex align-items-center gap-3">
-                    <span class="text-muted">
-                        👋 Hola, <strong>@Context.Session.GetString("Nombre")</strong>
-                    </span>
-
-                    <a asp-controller="Login" asp-action="Logout" class="btn btn-danger btn-sm">
-                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+            @if (Context.Session.GetString("Rol") == "Admin")
+            {
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "HorarioImagen" ? "active" : "")"
+                       asp-controller="HorarioImagen" asp-action="Index">
+                        <i class="bi bi-clock-history"></i> Horarios
                     </a>
-                </div>
+                </li>
 
-            </div>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Informacion" ? "active" : "")"
+                       asp-controller="Informacion" asp-action="Index">
+                        <i class="bi bi-info-circle"></i> Información
+                    </a>
+                </li>
+            }
+
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Archivos" ? "active" : "")"
+                   asp-controller="Archivos" asp-action="Index">
+                    <i class="bi bi-folder2"></i> Archivos
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Noticias" ? "active" : "")"
+                   asp-controller="Noticias" asp-action="Index">
+                    <i class="bi bi-newspaper"></i> Noticias
+                </a>
+            </li>
+
+            @if (Context.Session.GetString("Rol") == "Admin")
+            {
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Admin" ? "active" : "") fw-semibold"
+                       asp-controller="Admin" asp-action="Index">
+                        <i class="bi bi-gear-wide-connected"></i> Panel Admin
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <!-- USUARIO -->
+        <div class="user-info">
+            <span class="text-muted d-block mb-1">👋 Hola, <strong>@Context.Session.GetString("Nombre")</strong></span>
+            <a asp-controller="Login" asp-action="Logout" class="btn btn-logout btn-sm">
+                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+            </a>
         </div>
-    </nav>
+    </div>
 
-    <!-- CONTENIDO -->
-    <main class="container mt-4 mb-5">
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
         @RenderBody()
     </main>
 
     <!-- FOOTER -->
-    <footer>
+    <footer class="text-center mt-4 mb-4 text-muted">
         © 2025 Plataforma Luisa · Todos los derechos reservados.<br />
         Nicoya, Guanacaste, Costa Rica
     </footer>

@@ -32,36 +32,52 @@ public class HorarioImagenController : Controller
     }
 
     [HttpPost]
-    public IActionResult Crear(HorarioImagen model, IFormFile imagen)
+public IActionResult Crear(HorarioImagen model, IFormFile imagen)
+{
+    if (!ModelState.IsValid)
     {
-        if (!ModelState.IsValid)
-        {
-            CargarDatosParaSelects();
-            return View(model);
-        }
-
-        if (imagen != null && imagen.Length > 0)
-        {
-            string archivo = Guid.NewGuid() + Path.GetExtension(imagen.FileName);
-            string carpetaRel = Path.Combine("uploads/horarios", archivo);
-            string rutaFisica = Path.Combine(_env.WebRootPath, carpetaRel);
-
-            Directory.CreateDirectory(Path.GetDirectoryName(rutaFisica));
-
-            using var stream = new FileStream(rutaFisica, FileMode.Create);
-            imagen.CopyTo(stream);
-
-            model.ImagenUrl = "/" + carpetaRel.Replace("\\", "/");
-        }
-
-        model.SubidoPor = HttpContext.Session.GetString("Nombre") ?? "Desconocido";
-        model.FechaSubida = DateTime.Now;
-
-        _context.HorarioImagenes.Add(model);
-        _context.SaveChanges();
-
-        return RedirectToAction("Index");
+        CargarDatosParaSelects();
+        return View(model);
     }
+
+    // 🔍 Validación: impedir duplicado grado + sección
+    bool existeHorario = _context.HorarioImagenes.Any(h =>
+        h.Grado == model.Grado &&
+        h.Seccion == model.Seccion
+    );
+
+    if (existeHorario)
+    {
+        //ModelState.AddModelError("", "Ya existe un horario para este grado y sección.");
+         TempData["HorarioDuplicado"] = "Ya existe un horario para este grado y sección.";
+        CargarDatosParaSelects();
+        return View(model);
+    }
+
+    // Procesar imagen
+    if (imagen != null && imagen.Length > 0)
+    {
+        string archivo = Guid.NewGuid() + Path.GetExtension(imagen.FileName);
+        string carpetaRel = Path.Combine("uploads/horarios", archivo);
+        string rutaFisica = Path.Combine(_env.WebRootPath, carpetaRel);
+
+        Directory.CreateDirectory(Path.GetDirectoryName(rutaFisica));
+
+        using var stream = new FileStream(rutaFisica, FileMode.Create);
+        imagen.CopyTo(stream);
+
+        model.ImagenUrl = "/" + carpetaRel.Replace("\\", "/");
+    }
+
+    model.SubidoPor = HttpContext.Session.GetString("Nombre") ?? "Desconocido";
+    model.FechaSubida = DateTime.Now;
+
+    _context.HorarioImagenes.Add(model);
+    _context.SaveChanges();
+
+    return RedirectToAction("Index");
+}
+
 
     // -------------------- Editar --------------------
     public IActionResult Editar(int id)

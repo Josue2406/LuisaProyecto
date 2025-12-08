@@ -1,6 +1,9 @@
 @{
     ViewData["Title"] = "Contraseña Cambiada";
 }
-<h1>Contraseña actualizada</h1>
-<p>Tu contraseña ha sido cambiada correctamente. Ahora puedes iniciar sesión.</p>
-<a href="@Url.Action("Index","Login")">Ir a Iniciar Sesión</a>
+
+<div class="container mt-5 text-center" style="max-width:500px;">
+    <h2 class="mb-4 text-success">¡Contraseña Cambiada!</h2>
+    <p>Tu contraseña ha sido actualizada correctamente.</p>
+    <a asp-controller="Login" asp-action="Index" class="btn btn-primary mt-3">Ir a Iniciar Sesión</a>
+</div>

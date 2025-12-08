@@ -1,36 +1,227 @@
-<!DOCTYPE html>
-@using ProyectoLuisa.Data
-@using ProyectoLuisa.Models
-@inject ApplicationDbContext _context
+@{
+    Layout = null;
+}
 
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>@ViewData["Title"] - Plataforma Pública</title>
+    <meta charset="utf-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Plataforma Luisa</title>
 
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
 
-    <!-- ICONOS Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- AOS Animations -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
     <style>
-        .nav-link.active {
-            font-weight: bold;
-            color: #0d6efd !important;
+        body {
+            background: #f5fff8;
         }
-        footer {
-            padding: 25px 0;
-            background: #f8f9fa;
-            margin-top: 40px;
-            border-top: 1px solid #ddd;
+
+        /* Hero */
+        .hero {
+            position: relative;
+            height: 70vh;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
         }
+
+        #particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            z-index: 2;
+        }
+
+       .hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #2b8061 !important;   /* Verde visible */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+}
+
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: .9;
+            color: #2b8061 !important;
+        }
+
+        /* Cards */
+        .card-modern {
+            border-radius: 15px;
+            overflow: hidden;
+            border: none;
+            transition: .3s;
+        }
+
+        .card-modern:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0,0,0,.1);
+        }
+
+       /* ================= FOOTER MODERNO (Misma estructura, SOLO estilos) ================= */
+
+footer {
+    background: #1a1a1a !important;
+    border-top: 4px solid #00b873;
+}
+
+footer h5 {
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #00d68f; /* Verde elegante */
+}
+
+footer p,
+footer strong {
+    color: #dcdcdc;
+    line-height: 1.5;
+}
+
+footer img {
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* Línea superior */
+footer .border-top {
+    border-color: rgba(255,255,255,0.15) !important;
+}
+
+footer .mb-0 {
+    color: #bbbbbb;
+    font-size: 0.9rem;
+}
+
+/* Responsivo */
+@@media (max-width: 768px) {
+    footer .col-md-3 {
+        text-align: center;
+    }
+
+    footer img {
+        margin-bottom: 10px;
+    }
+}
+
+
+
+
+        /* ================= NAVBAR MODERNO (solo estilo, NO cambia HTML ni enlaces) ================= */
+
+:root{
+    --verde-suave: #E8F5EA;
+    --verde-claro: #C8E6C9;
+    --verde-medio: #72B08E;
+    --verde-oscuro: #1B8F57;
+    --border: #B7E4C7;
+}
+
+/* fondo y borde suave */
+.navbar {
+    background: var(--verde-suave) !important; /* mantiene navbar-light behavior */
+    border-bottom: 2px solid var(--border);
+    transition: background .25s ease, box-shadow .25s ease;
+}
+
+/* marca (logo + texto) - mantiene clases existentes */
+.navbar-brand {
+    color: var(--verde-oscuro) !important;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* nav links - estilo moderno, respetando .nav-link y .active existentes */
+.navbar .nav-link {
+    color: #2e604a !important;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: transform .18s ease, background .18s ease, color .18s ease;
+}
+
+/* efecto hover sutil */
+.navbar .nav-link:hover {
+    background: var(--verde-claro);
+    color: var(--verde-oscuro) !important;
+    transform: translateY(-2px);
+}
+
+/* estado activo - RESPETA la clase .active que ya usas en los anchors */
+.navbar .nav-link.active {
+    background: var(--verde-oscuro) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(27,143,87,0.18);
+}
+
+/* dropdown: apariencia coherente con el navbar */
+.navbar .dropdown-menu {
+    background: #f7fff8;
+    border: 1px solid #dff3e6;
+    border-radius: 10px;
+    padding: 6px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+/* dropdown items */
+.navbar .dropdown-item {
+    color: #2e604a !important;
+    border-radius: 8px;
+    transition: background .18s ease, color .18s ease;
+}
+.navbar .dropdown-item:hover {
+    background: var(--verde-claro);
+    color: var(--verde-oscuro) !important;
+}
+
+/* toggler (mobile) mantiene el icono por defecto pero con un toque */
+.navbar-toggler {
+    border-color: rgba(27,143,87,0.18);
+}
+.navbar-toggler-icon {
+    filter: opacity(.9) drop-shadow(0 1px 0 rgba(0,0,0,0.04));
+}
+
+/* pequeña sombra premium sin cambiar layout */
+.navbar.shadow-sm {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
+}
+
+/* ajustes responsivos: aumentar tap area en mobile */
+@@media (max-width: 767.98px) {
+    .navbar .nav-link {
+        padding: 12px 18px;
+    }
+    .navbar .dropdown-item {
+        padding: 10px 18px;
+    }
+}
+
     </style>
 </head>
+
 <body>
 
+    <!-- NAVBAR -->
+   
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
     <div class="container">
 
@@ -113,25 +304,44 @@
     </div>
 </nav>
 
-<div class="container mt-4">
-    @RenderBody()
-</div>
+
+@{
+    var action = ViewContext.RouteData.Values["Action"]?.ToString();
+    var controller = ViewContext.RouteData.Values["Controller"]?.ToString();
+}
+
+@if (controller == "Public" && action == "Index")
+{
+    <!-- HERO corporativo con partículas -->
+    <header class="hero mt-5">
+        <div id="particles"></div>
+
+        <div class="hero-content" data-aos="zoom-in">
+            <h1 class="hero-title">Bienvenido a Plataforma Luisa</h1>
+            <p class="hero-subtitle">Gestión moderna, accesible y profesional</p>
+        </div>
+    </header>
+    }
+
+    <!-- CONTENIDO DE LAS VISTAS -->
+    <main class="container my-5">
+        @RenderBody()
+    </main>
+
+
+
+    @inject ProyectoLuisa.Data.ApplicationDbContext _context
 
 @{
     var info = _context.InformacionInstitucional.FirstOrDefault();
 }
 
-<footer class="bg-dark text-white mt-5 py-4">
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white py-4">
     <div class="container">
         <div class="row">
 
-            <!-- Logo -->
-            <div class="col-md-3 mb-3">
-                @if (!string.IsNullOrEmpty(info?.LogoUrl))
-                {
-                    <img src="@info.LogoUrl" alt="Logo" style="max-width: 150px;">
-                }
-            </div>
+          
 
             <!-- Información de contacto -->
             <div class="col-md-3 mb-3">
@@ -171,9 +381,30 @@
     </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-@RenderSection("Scripts", required: false)
+    <!-- Particles -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@3.7.1/tsparticles.bundle.min.js"></script>
 
+    <!-- AOS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <script>
+        AOS.init();
+
+        /* Configuración de partículas suaves */
+        tsParticles.load("particles", {
+            particles: {
+                number: { value: 60 },
+                size: { value: 3 },
+                move: { speed: 1 },
+                opacity: { value: 0.3 },
+                color: { value: "#ffffff" },
+            }
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

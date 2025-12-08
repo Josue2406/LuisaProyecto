@@ -2,7 +2,7 @@
 
 <h3 class="fw-bold mb-3">📤 Subir Horario</h3>
 
-<form asp-action="Crear" enctype="multipart/form-data">
+<form asp-action="Crear" enctype="multipart/form-data" id="formCrear">
     <div class="mb-3">
         <label class="form-label">Grado</label>
         <select asp-for="Grado" class="form-select" required>
@@ -45,4 +45,44 @@
     </div>
 
     <button class="btn btn-primary">Guardar</button>
+
+    <button type="button" class="btn btn-danger ms-2" id="btnCancelar">
+        Cancelar
+    </button>
 </form>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Confirmar Cancelar
+    document.getElementById("btnCancelar").addEventListener("click", function () {
+        Swal.fire({
+            title: '¿Cancelar registro?',
+            text: "Se perderán los datos ingresados.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, cancelar',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/HorarioImagen/Index';
+            }
+        });
+    });
+</script>
+
+@* Mostrar SweetAlert si viene duplicado *@
+
+@if (TempData["HorarioDuplicado"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Horario duplicado',
+            text: "@Html.Raw(TempData["HorarioDuplicado"])",
+            confirmButtonColor: '#d33'
+        });
+    </script>
+}
+

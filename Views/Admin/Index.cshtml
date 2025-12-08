@@ -68,12 +68,21 @@
                         </form>
 
                         <!-- Botón Eliminar -->
-                        <form asp-action="Eliminar" method="post" style="display:inline" onsubmit="return confirm('¿Seguro que quieres eliminar este docente?');">
-                            <input type="hidden" name="id" value="@docente.Id" />
-                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
-                        </form>
+                        @if (docente.Rol != "Admin")
+{
+    <form asp-action="Eliminar" method="post" style="display:inline"
+          onsubmit="return confirm('¿Seguro que quieres eliminar este docente?');">
+        <input type="hidden" name="id" value="@docente.Id" />
+        <button type="submit" class="btn btn-sm btn-outline-danger">
+            <i class="bi bi-trash"></i> Eliminar
+        </button>
+    </form>
+}
+else
+{
+    <span class="text-muted">No permitido</span>
+}
+
                     </td>
                 </tr>
             }

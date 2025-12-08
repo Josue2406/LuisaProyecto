@@ -1,3 +1,4 @@
+@* _LayoutLogin.cshtml *@
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,14 +8,63 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f2f4f7;
+            font-family: "Segoe UI", Roboto, sans-serif;
+        }
+
+        h2, .btn, .form-label, .forgot-password {
+            color: #00b873; /* Verde principal */
+        }
+
+        .btn-login {
+            background-color: #00b873;
+            color: #fff;
+            border-radius: 8px;
+            padding: 12px;
+            width: 100%;
+            font-weight: 600;
+            transition: all 0.25s ease-in-out;
+        }
+
+        .btn-login:hover {
+            background-color: #009e5b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .forgot-password:hover {
+            color: #009e5b;
+            text-decoration: underline;
+        }
+
+        .login-card {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: auto;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
 </head>
 
-<body style="background: #f2f4f7;">
+<body>
 
-    <!-- Aquí solo va el contenido -->
     <main class="container mt-5">
-        @RenderBody()
+        @RenderBody() @* Aquí se inyecta el contenido de la vista *@
     </main>
 
+    @RenderSection("Scripts", required: false)
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

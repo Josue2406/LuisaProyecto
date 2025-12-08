@@ -103,7 +103,7 @@ public IActionResult Recuperar(string email)
     HttpContext.Session.Clear();
 
     // Redirigir al inicio
-    return RedirectToAction("Index", "Home");
+    return RedirectToAction("Index", "Login");
 }
 
     }

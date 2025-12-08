@@ -18,11 +18,11 @@ namespace ProyectoLuisa.Controllers
 
         public IActionResult Index()
         {
-            // 🔹 Información institucional
+            //  Información institucional
             var info = _context.InformacionInstitucional.FirstOrDefault();
             ViewBag.Info = info;
 
-            // 🔹 Últimos eventos publicados
+            //  Últimos eventos publicados
             var eventos = _context.Eventos
     .Where(e => e.Publicado)
     .OrderByDescending(e => e.Fecha)
@@ -31,7 +31,7 @@ namespace ProyectoLuisa.Controllers
 ViewBag.Eventos = eventos;
 
 
-            // 🔹 Horarios públicos (sin filtro 'Publicado')
+            //  Horarios públicos (sin filtro 'Publicado')
             var horarios = _context.Horarios
                 .OrderBy(h => h.DiaSemana)
                 .ThenBy(h => h.HoraInicio)

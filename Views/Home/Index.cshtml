@@ -4,7 +4,11 @@
 }
 
 <div class="container my-5">
-    <h2 class="text-center mb-4 fw-bold text-primary">🎉 Próximos Eventos</h2>
+
+    <!-- Título principal -->
+    <h2 class="text-center mb-5 fw-bold section-title">
+        🌿 Próximos Eventos
+    </h2>
 
     @if (eventos != null && eventos.Count > 0)
     {
@@ -12,7 +16,7 @@
             @foreach (var e in eventos)
             {
                 <div class="col-md-4 col-sm-6">
-                    <div class="card shadow-sm h-100 border-0 hover-zoom">
+                    <div class="card card-event shadow-sm h-100 border-0 hover-zoom">
                         @if (!string.IsNullOrEmpty(e.ImagenUrl))
                         {
                             <img src="@e.ImagenUrl"
@@ -22,9 +26,11 @@
                         }
 
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title text-primary fw-bold">@e.Titulo</h5>
-                            <p class="card-text text-muted small mb-2">
-                                <i class="bi bi-calendar-event"></i> @e.Fecha.ToString("dd/MM/yyyy")
+                            <h5 class="card-title fw-bold text-dark">@e.Titulo</h5>
+
+                            <p class="card-text small text-muted mb-2">
+                                <i class="bi bi-calendar-event"></i>
+                                @e.Fecha.ToString("dd/MM/yyyy")
                             </p>
 
                             <p class="card-text text-secondary flex-grow-1">
@@ -32,7 +38,7 @@
                             </p>
 
                             <a asp-controller="Eventos" asp-action="Detalles" asp-route-id="@e.Id"
-                               class="btn btn-outline-primary mt-auto w-100">
+                               class="btn btn-green-outline mt-auto w-100">
                                 <i class="bi bi-eye"></i> Ver más
                             </a>
                         </div>
@@ -43,29 +49,89 @@
     }
     else
     {
-        <div class="alert alert-info text-center mt-4 shadow-sm">
-            <i class="bi bi-info-circle"></i> No hay eventos publicados en este momento.
+        <div class="alert alert-green text-center mt-4 shadow-sm">
+            <i class="bi bi-info-circle"></i>
+            No hay eventos publicados en este momento.
         </div>
     }
 
+    <!-- Sección bienvenida -->
     <div class="text-center mt-5">
-    <h1 class="fw-bold text-primary mb-3">Bienvenido al Sistema de Gestión de Horarios</h1>
-    <p class="lead text-muted mb-4">Consulta los horarios por sección, profesor o grupo sin iniciar sesión.</p>
+        <h1 class="fw-bold section-title">Bienvenido al Sistema de Gestión de Horarios</h1>
+        <p class="lead text-muted mb-4">
+            Consulta los horarios por sección, profesor o grupo sin iniciar sesión.
+        </p>
 
-    <a asp-controller="Horarios" asp-action="Publico" 
-       class="btn btn-primary btn-lg fw-bold shadow-sm px-4 py-2">
-        <i class="bi bi-calendar-week"></i> Ver Horarios
-    </a>
-</div>
+        <a asp-controller="Horarios" asp-action="Publico"
+           class="btn btn-green btn-lg fw-bold shadow-sm px-4 py-2">
+            <i class="bi bi-calendar-week"></i> Ver Horarios
+        </a>
+    </div>
 
 </div>
 
 <style>
-    /* Animación sutil al pasar el mouse */
-    .hover-zoom {
-        transition: transform 0.3s ease-in-out;
+    /* Verde suave corporativo */
+    :root {
+        --verde-suave: #A8D5BA;
+        --verde-oscuro: #3F8A5D;
+        --verde-medio: #72B08E;
     }
+
+    /* Títulos principales */
+    .section-title {
+        color: var(--verde-oscuro);
+    }
+
+    /* Tarjetas de eventos */
+    .card-event {
+        border-radius: 14px;
+        background: #ffffff;
+        border: 1px solid #e6f4ec;
+    }
+
+    /* Botón verde sólido */
+    .btn-green {
+        background: var(--verde-oscuro);
+        border: none;
+        color: white;
+        transition: 0.3s;
+        border-radius: 10px;
+    }
+
+    .btn-green:hover {
+        background: var(--verde-medio);
+        color: white;
+    }
+
+    /* Botón verde outline */
+    .btn-green-outline {
+        border: 2px solid var(--verde-oscuro);
+        color: var(--verde-oscuro);
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .btn-green-outline:hover {
+        background: var(--verde-oscuro);
+        color: #fff;
+    }
+
+    /* Alert verde elegante */
+    .alert-green {
+        background: var(--verde-suave);
+        color: var(--verde-oscuro);
+        border: none;
+        border-radius: 10px;
+    }
+
+    /* Animación suave */
+    .hover-zoom {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+    }
+
     .hover-zoom:hover {
-        transform: translateY(-5px) scale(1.02);
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
     }
 </style>

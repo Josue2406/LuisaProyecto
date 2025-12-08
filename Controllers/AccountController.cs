@@ -18,57 +18,59 @@ namespace ProyectoLuisa.Controllers
             _emailService = emailService;
         }
 
-        // ------------------------------------------------------------
-        // 🔹 Activar cuenta (cuando el admin invita a un docente)
-        // ------------------------------------------------------------
-        public IActionResult ActivarCuenta(string email, string temp)
-{
-    var user = _context.Usuarios.FirstOrDefault(x => x.Correo == email);
-    if (user == null) return NotFound();
+        // GET: Activar cuenta con token
+        public IActionResult ActivarCuenta(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+                return View("TokenExpirado");
 
-    ViewBag.Email = email;
-    ViewBag.Temp = temp;
-    return View();
+            var tokenData = _context.PasswordResetTokens
+                .FirstOrDefault(t => t.Token == token && t.Expira > DateTime.UtcNow);
+
+            if (tokenData == null)
+                return View("TokenExpirado");
+
+            ViewBag.Token = token;
+            return View(); // ActivarCuenta.cshtml
+        }
+
+        // POST: Activar cuenta y establecer contraseña
+        [HttpPost] 
+        public async Task<IActionResult> ActivarCuenta(string token, string nuevaContrasena)
+        {
+            if (string.IsNullOrEmpty(token))
+                return View("TokenExpirado");
+
+            var tokenData = _context.PasswordResetTokens
+                .FirstOrDefault(t => t.Token == token && t.Expira > DateTime.UtcNow);
+
+            if (tokenData == null)
+                return View("TokenExpirado");
+
+            var user = _context.Usuarios.FirstOrDefault(u => u.Correo == tokenData.Correo);
+            if (user == null) return View("TokenExpirado");
+
+            user.ContrasenaHash = Convert.ToBase64String(
+                SHA256.HashData(Encoding.UTF8.GetBytes(nuevaContrasena))
+            );
+
+            user.Activo = true;
+
+            _context.PasswordResetTokens.Remove(tokenData);
+            await _context.SaveChangesAsync();
+
+            TempData["Mensaje"] = "Cuenta activada correctamente. Ahora puedes iniciar sesión.";
+            return RedirectToAction("Index", "Login");
+        }
+
+        // GET: Solicitar recuperación de contraseña
+        [HttpGet]
+public IActionResult Recuperar()
+{
+    return View(); // Vista con el formulario para escribir el correo
 }
 
-       [HttpPost]
-public async Task<IActionResult> ActivarCuenta(string email, string temporal, string nuevaContrasena)
-{
-    var user = _context.Usuarios.FirstOrDefault(x => x.Correo == email);
-
-    if (user == null)
-    {
-        ViewBag.Error = "Usuario no encontrado.";
-        return View();
-    }
-
-    // Hash de la temporal
-    var tempHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(temporal)));
-
-    if (tempHash != user.ContrasenaHash)
-    {
-        ViewBag.Error = "La contraseña temporal no es válida.";
-        return View();
-    }
-
-    // Guardar nueva contraseña
-    user.ContrasenaHash = Convert.ToBase64String(
-        SHA256.HashData(Encoding.UTF8.GetBytes(nuevaContrasena))
-    );
-    user.Activo = true;
-
-    await _context.SaveChangesAsync();
-
-    TempData["Mensaje"] = "Tu cuenta ha sido activada. Ya puedes iniciar sesión.";
-
-    return RedirectToAction("Index", "Login");
-}
-
-
-        // ------------------------------------------------------------
-        // 🔹 Recuperar contraseña (formulario donde el usuario escribe su correo)
-        // ------------------------------------------------------------
-        [HttpPost]
+[HttpPost]
 public async Task<IActionResult> Recuperar(string correo)
 {
     var user = _context.Usuarios.FirstOrDefault(u => u.Correo == correo);
@@ -78,12 +80,12 @@ public async Task<IActionResult> Recuperar(string correo)
         return View();
     }
 
+    // Limpiar tokens expirados
     _context.PasswordResetTokens.RemoveRange(
         _context.PasswordResetTokens.Where(t => t.Expira < DateTime.UtcNow)
     );
 
     string token = Guid.NewGuid().ToString();
-
     var newToken = new PasswordResetToken
     {
         Correo = correo,
@@ -94,70 +96,53 @@ public async Task<IActionResult> Recuperar(string correo)
     _context.PasswordResetTokens.Add(newToken);
     await _context.SaveChangesAsync();
 
+    // Generar link de recuperación
     string link = Url.Action("Restablecer", "Account", new { token }, Request.Scheme);
 
-    string html = $@"
-        <h2>Recuperación de contraseña</h2>
-        <p>Haz clic en el enlace para restablecerla:</p>
-        <a href='{link}'>Restablecer contraseña</a>
-    ";
-
-    await _emailService.EnviarCorreoAsync(correo, "Restablecer contraseña", html);
+    // Enviar correo
+    await _emailService.EnviarCorreoRecuperacion(correo, link);
 
     TempData["Mensaje"] = "Se ha enviado un enlace de recuperación a tu correo.";
     return RedirectToAction("Index", "Login");
 }
 
 
-        // ------------------------------------------------------------
-        // 🔹 Mostrar formulario de nueva contraseña (GET)
-        // ------------------------------------------------------------
 
-public IActionResult Restablecer(string token)
-{
-    if (string.IsNullOrEmpty(token))
-        return View("TokenExpirado");
+        // GET: Restablecer contraseña
+        public IActionResult Restablecer(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+                return View("TokenExpirado");
 
-    var tokenData = _context.PasswordResetTokens
-        .FirstOrDefault(t => t.Token == token && t.Expira > DateTime.UtcNow);
+            var tokenData = _context.PasswordResetTokens
+                .FirstOrDefault(t => t.Token == token && t.Expira > DateTime.UtcNow);
 
-    if (tokenData == null)
-        return View("TokenExpirado");
+            if (tokenData == null)
+                return View("TokenExpirado");
 
-    ViewBag.Token = token;
-    return View();
-}
+            ViewBag.Token = token;
+            return View();
+        }
 
-        // ------------------------------------------------------------
-        // 🔹 Guardar nueva contraseña (POST)
-        // -------
-        // -----------------------------------------------------
-
+        // POST: Guardar nueva contraseña
         [HttpPost]
-public async Task<IActionResult> Restablecer(string token, string nuevaContrasena)
-{
-    var tokenData = _context.PasswordResetTokens
-        .FirstOrDefault(t => t.Token == token && t.Expira > DateTime.UtcNow);
+        public async Task<IActionResult> Restablecer(string token, string nuevaContrasena)
+        {
+            var tokenData = _context.PasswordResetTokens
+                .FirstOrDefault(t => t.Token == token && t.Expira > DateTime.UtcNow);
 
-    if (tokenData == null)
-        return View("TokenExpirado");
+            if (tokenData == null)
+                return View("TokenExpirado");
 
-    var user = _context.Usuarios.FirstOrDefault(u => u.Correo == tokenData.Correo);
-    if (user == null)
-    {
-        ViewBag.Error = "Usuario no encontrado.";
-        return View();
-    }
+            var user = _context.Usuarios.FirstOrDefault(u => u.Correo == tokenData.Correo);
+            if (user == null) return View("TokenExpirado");
 
-    user.ContrasenaHash = Convert.ToBase64String(
-        SHA256.HashData(Encoding.UTF8.GetBytes(nuevaContrasena))
-    );
+            user.ContrasenaHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(nuevaContrasena)));
 
-    _context.PasswordResetTokens.Remove(tokenData);
-    await _context.SaveChangesAsync();
+            _context.PasswordResetTokens.Remove(tokenData);
+            await _context.SaveChangesAsync();
 
-    return View("ConfirmacionCambio");
-}
-
+            return View("ConfirmacionCambio");
+        }
     }
 }
